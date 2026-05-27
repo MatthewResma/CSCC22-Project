@@ -1,4 +1,7 @@
 ---
+import { supabase } from '../lib/supabase';
+
+const { data: photos } = await supabase.from('gallery').select('*');
 ---
 
 <!DOCTYPE html>
@@ -486,145 +489,19 @@
   </div>
 
   <!-- GALLERY -->
-  <section class="gallery-section">
-    <div class="gallery-inner" id="galleryGrid">
-
-      <!-- BEACH -->
-      <div class="gallery-item" data-category="beach" data-caption="Beachfront at Sunrise">
-        <img src="/beach1.jpg" alt="Beach at Sunrise" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Beach</span>
-          <span class="gallery-caption">Beachfront at Sunrise</span>
-        </div>
+  <div class="gallery-inner" id="galleryGrid">
+  {photos && photos.length > 0 ? photos.map((photo) => (
+    <div class="gallery-item" data-category={photo.category} data-caption={photo.caption}>
+      <img src={photo.url} alt={photo.caption || 'Resort photo'} loading="lazy">
+      <div class="gallery-overlay">
+        <span class="gallery-label">{photo.category || 'Resort'}</span>
+        <span class="gallery-caption">{photo.caption || 'Lcabana Resort'}</span>
       </div>
-
-      <div class="gallery-item" data-category="beach" data-caption="Crystal Clear Waters">
-        <img src="/beach2.jpg" alt="Crystal Waters" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Beach</span>
-          <span class="gallery-caption">Crystal Clear Waters</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-category="beach" data-caption="Golden Hour Shoreline">
-        <img src="/beach3.jpg" alt="Shoreline" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Beach</span>
-          <span class="gallery-caption">Golden Hour Shoreline</span>
-        </div>
-      </div>
-
-      <!-- VILLA / ROOM -->
-      <div class="gallery-item" data-category="villa" data-caption="Luxury Villa Interior">
-        <img src="/villa.jpg" alt="Villa Interior" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Villa</span>
-          <span class="gallery-caption">Luxury Villa Interior</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-category="villa" data-caption="Private Bedroom">
-        <img src="/room.jpg" alt="Bedroom" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Villa</span>
-          <span class="gallery-caption">Private Bedroom</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-category="villa" data-caption="Villa Terrace View">
-        <img src="/villa2.jpg" alt="Villa Terrace" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Villa</span>
-          <span class="gallery-caption">Villa Terrace View</span>
-        </div>
-      </div>
-
-      <!-- POOL -->
-      <div class="gallery-item" data-category="pool" data-caption="Infinity Pool at Dusk">
-        <img src="/pool1.jpg" alt="Infinity Pool" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Pool</span>
-          <span class="gallery-caption">Infinity Pool at Dusk</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-category="pool" data-caption="Poolside Relaxation">
-        <img src="/pool2.jpg" alt="Poolside" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Pool</span>
-          <span class="gallery-caption">Poolside Relaxation</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-category="pool" data-caption="Pool with Ocean View">
-        <img src="/pool3.jpg" alt="Pool View" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Pool</span>
-          <span class="gallery-caption">Pool with Ocean View</span>
-        </div>
-      </div>
-
-      <!-- GROUNDS -->
-      <div class="gallery-item" data-category="grounds" data-caption="Tropical Garden Path">
-        <img src="/grounds1.jpg" alt="Garden" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Grounds</span>
-          <span class="gallery-caption">Tropical Garden Path</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-category="grounds" data-caption="Resort Entrance">
-        <img src="/grounds2.jpg" alt="Entrance" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Grounds</span>
-          <span class="gallery-caption">Resort Entrance</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-category="grounds" data-caption="Lush Surroundings">
-        <img src="/grounds3.jpg" alt="Surroundings" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Grounds</span>
-          <span class="gallery-caption">Lush Surroundings</span>
-        </div>
-      </div>
-
-      <!-- EVENTS -->
-      <div class="gallery-item" data-category="events" data-caption="Outdoor Event Setup">
-        <img src="/event1.jpg" alt="Event Setup" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Events</span>
-          <span class="gallery-caption">Outdoor Event Setup</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-category="events" data-caption="Beachside Celebration">
-        <img src="/event2.jpg" alt="Celebration" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Events</span>
-          <span class="gallery-caption">Beachside Celebration</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-category="events" data-caption="Function Hall">
-        <img src="/event3.jpg" alt="Function Hall" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-label">Events</span>
-          <span class="gallery-caption">Function Hall</span>
-        </div>
-      </div>
-
     </div>
-  </section>
-
-  <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" id="lightboxClose">✕</button>
-    <button class="lightbox-prev" id="lightboxPrev">‹</button>
-    <img class="lightbox-img" id="lightboxImg" src="" alt="">
-    <button class="lightbox-next" id="lightboxNext">›</button>
-    <div class="lightbox-caption" id="lightboxCaption"></div>
-  </div>
+  )) : (
+    <p style="color:#6b7280; text-align:center; padding:60px 0;">No photos uploaded yet.</p>
+  )}
+</div>
 
   <!-- FOOTER -->
   <footer>

@@ -1,3 +1,12 @@
+---
+import { supabase } from '../lib/supabase';
+
+const { data: villa } = await supabase.from('villa').select('*').single();
+---
+<!DOCTYPE html>
+...
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -604,11 +613,11 @@
           <span class="villa-tag">Most Popular</span>
         </div>
         <div class="villa-card-content">
-          <h3>Beachfront <em>Villa</em></h3>
+          <h3>{villa?.name || 'Beachfront Villa'}</h3>
           <div class="villa-divider"></div>
-          <p>Step directly onto the sand from your private terrace. Fall asleep to the sound of waves and wake to golden sunrise views over open water.</p>
+          <p>{villa?.description || 'Step directly onto the sand from your private terrace.'}</p>
           <div class="villa-price-block">
-            <span class="price-amount">₱5,000</span>
+            <span class="price-amount">₱{villa?.price || '5,000'}</span>
             <span class="price-unit">/ night · inclusive</span>
           </div>
           <ul class="villa-amenities">
