@@ -2,6 +2,12 @@
 import { supabase } from '../lib/supabase';
 
 const { data: photos } = await supabase.from('gallery').select('*');
+
+const { data: settingsData } = await supabase.from('site_settings').select('*');
+const settings = {};
+if (settingsData) settingsData.forEach(row => settings[row.key] = row.value);
+
+const galleryHeroImage = settings.gallery_hero_image || '/beach1.jpg';
 ---
 
 <!DOCTYPE html>
@@ -35,7 +41,6 @@ const { data: photos } = await supabase.from('gallery').select('*');
       overflow-x: hidden;
     }
 
-    /* ── NAV ── */
     nav {
       position: fixed;
       top: 0;
@@ -115,7 +120,6 @@ const { data: photos } = await supabase.from('gallery').select('*');
     nav.scrolled .nav-cta { border-color: var(--ocean); color: var(--ocean) !important; }
     nav.scrolled .nav-cta:hover { background: var(--ocean) !important; color: white !important; }
 
-    /* ── HERO ── */
     .hero {
       height: 65vh;
       min-height: 480px;
@@ -131,7 +135,6 @@ const { data: photos } = await supabase.from('gallery').select('*');
     .hero-bg {
       position: absolute;
       inset: 0;
-      background: url('/beach1.jpg') center/cover no-repeat;
       transform: scale(1.04);
       animation: heroZoom 8s ease-out forwards;
     }
@@ -141,12 +144,7 @@ const { data: photos } = await supabase.from('gallery').select('*');
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        to top,
-        rgba(0,20,45,0.85) 0%,
-        rgba(0,20,45,0.3) 60%,
-        rgba(0,10,30,0.15) 100%
-      );
+      background: linear-gradient(to top, rgba(0,20,45,0.85) 0%, rgba(0,20,45,0.3) 60%, rgba(0,10,30,0.15) 100%);
     }
 
     .hero-content {
@@ -181,7 +179,6 @@ const { data: photos } = await supabase.from('gallery').select('*');
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── FILTER TABS ── */
     .filter-section {
       padding: 60px 20px 40px;
       background: white;
@@ -214,18 +211,9 @@ const { data: photos } = await supabase.from('gallery').select('*');
       transition: all 0.3s ease;
     }
 
-    .filter-btn:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
+    .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .filter-btn.active { background: var(--deep); border-color: var(--deep); color: white; }
 
-    .filter-btn.active {
-      background: var(--deep);
-      border-color: var(--deep);
-      color: white;
-    }
-
-    /* ── GALLERY GRID ── */
     .gallery-section {
       padding: 60px 20px 100px;
       background: white;
@@ -266,9 +254,7 @@ const { data: photos } = await supabase.from('gallery').select('*');
       transition: background 0.4s ease;
     }
 
-    .gallery-item:hover .gallery-overlay {
-      background: rgba(0,20,45,0.55);
-    }
+    .gallery-item:hover .gallery-overlay { background: rgba(0,20,45,0.55); }
 
     .gallery-label {
       font-size: 11px;
@@ -291,17 +277,10 @@ const { data: photos } = await supabase.from('gallery').select('*');
     }
 
     .gallery-item:hover .gallery-label,
-    .gallery-item:hover .gallery-caption {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .gallery-item:hover .gallery-caption { opacity: 1; transform: translateY(0); }
 
-    /* hidden items */
-    .gallery-item.hidden {
-      display: none;
-    }
+    .gallery-item.hidden { display: none; }
 
-    /* ── LIGHTBOX ── */
     .lightbox {
       display: none;
       position: fixed;
@@ -344,8 +323,7 @@ const { data: photos } = await supabase.from('gallery').select('*');
 
     .lightbox-close:hover { opacity: 1; }
 
-    .lightbox-prev,
-    .lightbox-next {
+    .lightbox-prev, .lightbox-next {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -378,12 +356,7 @@ const { data: photos } = await supabase.from('gallery').select('*');
       text-align: center;
     }
 
-    /* ── FOOTER ── */
-    footer {
-      background: #001220;
-      color: white;
-      padding: 60px 20px 28px;
-    }
+    footer { background: #001220; color: white; padding: 60px 20px 28px; }
 
     .footer-top {
       max-width: 1200px;
@@ -393,32 +366,9 @@ const { data: photos } = await supabase.from('gallery').select('*');
       gap: 40px;
     }
 
-    .footer-brand p {
-      color: rgba(255,255,255,0.5);
-      font-size: 14px;
-      line-height: 1.7;
-      max-width: 260px;
-      margin-top: 16px;
-    }
-
-    .footer-col h4 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      font-weight: 400;
-      margin-bottom: 20px;
-      color: white;
-    }
-
-    .footer-col a, .footer-col p {
-      color: rgba(255,255,255,0.5);
-      font-size: 13px;
-      text-decoration: none;
-      display: block;
-      margin-bottom: 10px;
-      line-height: 1.6;
-      transition: color 0.3s;
-    }
-
+    .footer-brand p { color: rgba(255,255,255,0.5); font-size: 14px; line-height: 1.7; max-width: 260px; margin-top: 16px; }
+    .footer-col h4 { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; margin-bottom: 20px; color: white; }
+    .footer-col a, .footer-col p { color: rgba(255,255,255,0.5); font-size: 13px; text-decoration: none; display: block; margin-bottom: 10px; line-height: 1.6; transition: color 0.3s; }
     .footer-col a:hover { color: var(--gold); }
 
     .footer-bottom {
@@ -434,7 +384,6 @@ const { data: photos } = await supabase.from('gallery').select('*');
 
     .footer-bottom p { color: rgba(255,255,255,0.3); font-size: 12px; }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       nav { padding: 20px 24px; }
       nav.scrolled { padding: 14px 24px; }
@@ -466,9 +415,9 @@ const { data: photos } = await supabase.from('gallery').select('*');
     </ul>
   </nav>
 
-  <!-- HERO -->
+  <!-- HERO — dynamic from admin -->
   <section class="hero">
-    <div class="hero-bg"></div>
+    <div class="hero-bg" style={`background: url('${galleryHeroImage}') center/cover no-repeat`}></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-eyebrow">Lcabana Resort · Visual Tour</p>
@@ -489,19 +438,30 @@ const { data: photos } = await supabase.from('gallery').select('*');
   </div>
 
   <!-- GALLERY -->
-  <div class="gallery-inner" id="galleryGrid">
-  {photos && photos.length > 0 ? photos.map((photo) => (
-    <div class="gallery-item" data-category={photo.category} data-caption={photo.caption}>
-      <img src={photo.url} alt={photo.caption || 'Resort photo'} loading="lazy">
-      <div class="gallery-overlay">
-        <span class="gallery-label">{photo.category || 'Resort'}</span>
-        <span class="gallery-caption">{photo.caption || 'Lcabana Resort'}</span>
-      </div>
+  <section class="gallery-section">
+    <div class="gallery-inner" id="galleryGrid">
+      {photos && photos.length > 0 ? photos.map((photo) => (
+        <div class="gallery-item" data-category={photo.category} data-caption={photo.caption}>
+          <img src={photo.url} alt={photo.caption || 'Resort photo'} loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-label">{photo.category || 'Resort'}</span>
+            <span class="gallery-caption">{photo.caption || 'Lcabana Resort'}</span>
+          </div>
+        </div>
+      )) : (
+        <p style="color:#6b7280; text-align:center; padding:60px 0;">No photos uploaded yet.</p>
+      )}
     </div>
-  )) : (
-    <p style="color:#6b7280; text-align:center; padding:60px 0;">No photos uploaded yet.</p>
-  )}
-</div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">✕</button>
+    <button class="lightbox-prev" id="lightboxPrev">‹</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <button class="lightbox-next" id="lightboxNext">›</button>
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
 
   <!-- FOOTER -->
   <footer>
@@ -534,13 +494,9 @@ const { data: photos } = await supabase.from('gallery').select('*');
   </footer>
 
   <script>
-    // Navbar scroll
     const nav = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 60);
-    });
+    window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); });
 
-    // Filter
     const filterBtns = document.querySelectorAll('.filter-btn');
     const galleryItems = document.querySelectorAll('.gallery-item');
 
@@ -548,7 +504,6 @@ const { data: photos } = await supabase.from('gallery').select('*');
       btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
         const filter = btn.dataset.filter;
         galleryItems.forEach(item => {
           if (filter === 'all' || item.dataset.category === filter) {
@@ -560,7 +515,6 @@ const { data: photos } = await supabase.from('gallery').select('*');
       });
     });
 
-    // Lightbox
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
     const lightboxCaption = document.getElementById('lightboxCaption');
@@ -601,9 +555,7 @@ const { data: photos } = await supabase.from('gallery').select('*');
     document.getElementById('lightboxPrev').addEventListener('click', () => navigate(-1));
     document.getElementById('lightboxNext').addEventListener('click', () => navigate(1));
 
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 
     document.addEventListener('keydown', (e) => {
       if (!lightbox.classList.contains('open')) return;
@@ -612,13 +564,9 @@ const { data: photos } = await supabase.from('gallery').select('*');
       if (e.key === 'ArrowRight') navigate(1);
     });
 
-    // Fade in on scroll
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
-        }
+        if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
       });
     }, { threshold: 0.1 });
 

@@ -13,7 +13,6 @@
   <style>
     :root {
       --ocean: #0077b6;
-      --sky: #00b4d8;
       --sand: #f5efe6;
       --deep: #003049;
       --foam: #caf0f8;
@@ -133,19 +132,12 @@
       animation: heroZoom 8s ease-out forwards;
     }
 
-    @keyframes heroZoom {
-      to { transform: scale(1); }
-    }
+    @keyframes heroZoom { to { transform: scale(1); } }
 
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        to top,
-        rgba(0,20,45,0.85) 0%,
-        rgba(0,20,45,0.3) 60%,
-        rgba(0,10,30,0.15) 100%
-      );
+      background: linear-gradient(to top, rgba(0,20,45,0.85) 0%, rgba(0,20,45,0.3) 60%, rgba(0,10,30,0.15) 100%);
     }
 
     .hero-content {
@@ -180,213 +172,258 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── CONTACT SECTION ── */
-    .contact-section {
-      padding: 100px 20px;
-      background: white;
-    }
-
-    .contact-inner {
-      max-width: 1100px;
-      margin: auto;
+    /* ── SPLIT SCREEN ── */
+    .split {
       display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 80px;
-      align-items: start;
+      grid-template-columns: 1fr 1fr;
+      min-height: 600px;
     }
 
-    /* ── INFO SIDE ── */
-    .info-side {}
+    /* LEFT — DARK SIDE */
+    .split-left {
+      background: var(--deep);
+      padding: 80px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-    .section-eyebrow {
+    .split-left::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.08);
+      pointer-events: none;
+    }
+
+    .split-left::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(0,119,182,0.1);
+      pointer-events: none;
+    }
+
+    .split-eyebrow {
       font-size: 11px;
       letter-spacing: 3px;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
-    .info-side h2 {
+    .split-left h2 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(32px, 3.5vw, 44px);
+      font-size: clamp(32px, 3vw, 44px);
       font-weight: 300;
-      color: var(--deep);
+      color: white;
       line-height: 1.2;
       margin-bottom: 12px;
     }
 
-    .info-side h2 em { font-style: italic; color: var(--ocean); }
+    .split-left h2 em { font-style: italic; color: var(--foam); }
 
-    .info-divider {
+    .split-divider {
       width: 40px;
       height: 2px;
       background: var(--gold);
       margin: 24px 0;
     }
 
-    .info-side > p {
-      color: var(--muted);
+    .split-left > p {
+      color: rgba(255,255,255,0.6);
       font-size: 15px;
       line-height: 1.8;
-      margin-bottom: 40px;
+      margin-bottom: 48px;
+      max-width: 360px;
     }
 
-    .contact-cards {
+    .info-list {
       display: flex;
       flex-direction: column;
+      gap: 28px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
       gap: 16px;
     }
 
-    .contact-card {
+    .info-item-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
       display: flex;
-      align-items: flex-start;
-      gap: 18px;
-      padding: 24px;
-      border: 1px solid #ebebeb;
-      border-radius: 4px;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
       transition: all 0.3s ease;
     }
 
-    .contact-card:hover {
+    .info-item:hover .info-item-icon {
+      background: var(--gold);
       border-color: var(--gold);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-      transform: translateX(4px);
     }
 
-    .contact-card-icon {
-      font-size: 24px;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .contact-card-text h4 {
+    .info-item-text h4 {
       font-size: 11px;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
-    .contact-card-text p,
-    .contact-card-text a {
-      font-size: 15px;
-      color: var(--text);
-      text-decoration: none;
+    .info-item-text p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.75);
       line-height: 1.6;
-      transition: color 0.3s;
     }
 
-    .contact-card-text a:hover { color: var(--ocean); }
-
-    /* ── FORM SIDE ── */
-    .form-side {
+    /* RIGHT — LIGHT SIDE */
+    .split-right {
       background: var(--sand);
-      padding: 52px 48px;
-      border-radius: 6px;
+      padding: 80px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
-    .form-side h3 {
+    .split-right h2 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
+      font-size: clamp(32px, 3vw, 44px);
       font-weight: 300;
       color: var(--deep);
+      line-height: 1.2;
       margin-bottom: 8px;
     }
 
-    .form-side h3 em { font-style: italic; color: var(--ocean); }
+    .split-right h2 em { font-style: italic; color: var(--ocean); }
 
-    .form-side > p {
+    .split-right > p {
       color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 36px;
-      line-height: 1.6;
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 40px;
+      margin-top: 16px;
     }
 
-    .form-group {
-      margin-bottom: 20px;
+    .social-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
-    .form-group label {
-      display: block;
-      font-size: 11px;
+    .social-btn {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 22px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 1.5px solid transparent;
+      background: white;
+    }
+
+    .social-btn:hover {
+      transform: translateX(6px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .social-btn-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn-text {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .social-btn-label {
+      font-size: 10px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 8px;
+      margin-bottom: 2px;
     }
 
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 14px 16px;
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 2px;
-      font-family: 'DM Sans', sans-serif;
+    .social-btn-name {
       font-size: 14px;
-      color: var(--text);
-      transition: border-color 0.3s ease;
-      outline: none;
-      appearance: none;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      border-color: var(--gold);
-    }
-
-    .form-group textarea { resize: vertical; min-height: 120px; }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 16px;
-      background: var(--deep);
-      color: white;
-      border: none;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
       font-weight: 500;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 8px;
+      color: var(--text);
     }
 
-    .btn-submit:hover {
-      background: var(--ocean);
-      transform: translateY(-2px);
-    }
-
-    .form-note {
-      font-size: 12px;
+    .social-btn-arrow {
+      font-size: 16px;
       color: var(--muted);
-      text-align: center;
-      margin-top: 14px;
+      transition: all 0.3s;
     }
+
+    .social-btn:hover .social-btn-arrow {
+      color: var(--text);
+      transform: translateX(4px);
+    }
+
+    /* Facebook */
+    .btn-facebook { border-color: #e8eeff; }
+    .btn-facebook:hover { border-color: #1877f2; }
+    .btn-facebook .social-btn-icon { background: #1877f2; color: white; }
+
+    /* Instagram */
+    .btn-instagram { border-color: #ffe8f3; }
+    .btn-instagram:hover { border-color: #e1306c; }
+    .btn-instagram .social-btn-icon { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
+
+    /* Phone */
+    .btn-phone { border-color: #e8fdf0; }
+    .btn-phone:hover { border-color: #16a34a; }
+    .btn-phone .social-btn-icon { background: #16a34a; color: white; }
+
+    /* Email */
+    .btn-email { border-color: #fef9e8; }
+    .btn-email:hover { border-color: #d97706; }
+    .btn-email .social-btn-icon { background: #d97706; color: white; }
 
     /* ── MAP ── */
     .map-section {
-      padding: 0 20px 100px;
+      padding: 80px 20px;
       background: white;
     }
 
-    .map-inner {
-      max-width: 1100px;
-      margin: auto;
-    }
+    .map-inner { max-width: 1200px; margin: auto; }
 
-    .map-header {
-      margin-bottom: 28px;
+    .map-header { margin-bottom: 28px; }
+
+    .map-eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
     }
 
     .map-header h3 {
@@ -398,10 +435,9 @@
 
     .map-frame {
       width: 100%;
-      height: 400px;
+      height: 420px;
       border: none;
       border-radius: 6px;
-      filter: grayscale(20%);
     }
 
     /* ── FOOTER ── */
@@ -412,7 +448,7 @@
     }
 
     .footer-top {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto 48px;
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr;
@@ -448,7 +484,7 @@
     .footer-col a:hover { color: var(--gold); }
 
     .footer-bottom {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: auto;
       padding-top: 28px;
       border-top: 1px solid rgba(255,255,255,0.08);
@@ -460,32 +496,19 @@
 
     .footer-bottom p { color: rgba(255,255,255,0.3); font-size: 12px; }
 
-    /* ── SUCCESS MESSAGE ── */
-    .success-msg {
-      display: none;
-      background: #e6f4ea;
-      border: 1px solid #a8d5b5;
-      border-radius: 4px;
-      padding: 16px 20px;
-      color: #2d6a4f;
-      font-size: 14px;
-      margin-top: 16px;
-      text-align: center;
-    }
-
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       nav { padding: 20px 24px; }
       nav.scrolled { padding: 14px 24px; }
       .nav-links { display: none; }
       .hero-content { padding: 0 24px 52px; }
-      .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+      .split { grid-template-columns: 1fr; }
+      .split-left { padding: 60px 32px; }
+      .split-right { padding: 60px 32px; }
       .footer-top { grid-template-columns: 1fr 1fr; }
-      .form-side { padding: 36px 28px; }
     }
 
     @media (max-width: 480px) {
-      .form-row { grid-template-columns: 1fr; }
       .footer-top { grid-template-columns: 1fr; }
     }
   </style>
@@ -513,104 +536,84 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="contact-section">
-    <div class="contact-inner">
+  <!-- SPLIT SCREEN -->
+  <div class="split">
 
-      <!-- INFO -->
-      <div class="info-side">
-        <div class="section-eyebrow">Our Details</div>
-        <h2>Reach Us<br><em>Anytime</em></h2>
-        <div class="info-divider"></div>
-        <p>Whether you're planning your stay, have a special request, or simply want to know more — our team is always ready to assist you.</p>
+    <!-- LEFT — DARK -->
+    <div class="split-left">
+      <div class="split-eyebrow">Our Details</div>
+      <h2>Find Us &<br><em>Reach Out</em></h2>
+      <div class="split-divider"></div>
+      <p>We're always happy to assist with reservations, inquiries, or anything you need to make your stay perfect.</p>
 
-        <div class="contact-cards">
-          <div class="contact-card">
-            <div class="contact-card-icon">📍</div>
-            <div class="contact-card-text">
-              <h4>Location</h4>
-              <p>Cagayan de Oro, Philippines</p>
-            </div>
+      <div class="info-list">
+        <div class="info-item">
+          <div class="info-item-icon">📍</div>
+          <div class="info-item-text">
+            <h4>Location</h4>
+            <p>Alubijid, Misamis Oriental<br>Philippines</p>
           </div>
-          <div class="contact-card">
-            <div class="contact-card-icon">📞</div>
-            <div class="contact-card-text">
-              <h4>Phone</h4>
-              <a href="tel:+639123456789">+63 912 345 6789</a>
-            </div>
-          </div>
-          <div class="contact-card">
-            <div class="contact-card-icon">📧</div>
-            <div class="contact-card-text">
-              <h4>Email</h4>
-              <a href="mailto:reservations@lcabanaresort.com">reservations@lcabanaresort.com</a>
-            </div>
-          </div>
-          <div class="contact-card">
-            <div class="contact-card-icon">🕐</div>
-            <div class="contact-card-text">
-              <h4>Office Hours</h4>
-              <p>Monday – Sunday, 8:00 AM – 8:00 PM</p>
-            </div>
+       
+        </div>
+        <div class="info-item">
+          
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon">🕐</div>
+          <div class="info-item-text">
+            <h4>Office Hours</h4>
+            <p>Monday – Sunday<br>8:00 AM – 8:00 PM</p>
           </div>
         </div>
       </div>
-
-      <!-- FORM -->
-      <div class="form-side">
-        <h3>Send a <em>Message</em></h3>
-        <p>Fill in the form below and we'll get back to you within 24 hours.</p>
-
-        <form id="contactForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label>First Name</label>
-              <input type="text" placeholder="Juan" required />
-            </div>
-            <div class="form-group">
-              <label>Last Name</label>
-              <input type="text" placeholder="Dela Cruz" required />
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" placeholder="you@email.com" required />
-          </div>
-          <div class="form-group">
-            <label>Phone Number</label>
-            <input type="tel" placeholder="+63 912 345 6789" />
-          </div>
-          <div class="form-group">
-            <label>Type of Inquiry</label>
-            <select>
-              <option value="">Select an option</option>
-              <option>Villa Reservation</option>
-              <option>Group Booking</option>
-              <option>Events & Functions</option>
-              <option>General Inquiry</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Message</label>
-            <textarea placeholder="Tell us how we can help you..."></textarea>
-          </div>
-          <button type="submit" class="btn-submit">Send Message</button>
-          <p class="form-note">We typically respond within 24 hours.</p>
-          <div class="success-msg" id="successMsg">
-            ✓ Your message has been sent! We'll be in touch soon.
-          </div>
-        </form>
-      </div>
-
     </div>
-  </section>
+
+    <!-- RIGHT — LIGHT -->
+    <div class="split-right">
+      <div class="split-eyebrow">Connect With Us</div>
+      <h2>Message Us<br><em>Directly</em></h2>
+      <p>Reach out through any of our platforms — we respond quickly and would love to help plan your perfect getaway.</p>
+
+      <div class="social-buttons">
+
+        <a href="https://www.facebook.com/el.cabana.503" target="_blank" class="social-btn btn-facebook">
+          <div class="social-btn-icon">f</div>
+          <div class="social-btn-text">
+            <span class="social-btn-label">Facebook</span>
+            <span class="social-btn-name">Message us on Facebook</span>
+          </div>
+          <span class="social-btn-arrow">→</span>
+        </a>
+
+        <a href="tel:+639123456789" class="social-btn btn-phone">
+          <div class="social-btn-icon">📞</div>
+          <div class="social-btn-text">
+            <span class="social-btn-label">Call Us</span>
+            <span class="social-btn-name">+63 912 345 6789</span>
+          </div>
+          <span class="social-btn-arrow">→</span>
+        </a>
+
+        <a href="mailto:reservations@lcabanaresort.com" class="social-btn btn-email">
+          <div class="social-btn-icon">✉️</div>
+          <div class="social-btn-text">
+            <span class="social-btn-label">Email Us</span>
+            <span class="social-btn-name">reservations@lcabanaresort.com</span>
+          </div>
+          <span class="social-btn-arrow">→</span>
+        </a>
+
+      </div>
+    </div>
+
+  </div>
 
   <!-- MAP -->
   <section class="map-section">
     <div class="map-inner">
       <div class="map-header">
-        <div class="section-eyebrow">Find Us</div>
-        <h3>Cagayan de Oro, <em style="font-style:italic; color:var(--ocean); font-family:'Cormorant Garamond',serif;">Philippines</em></h3>
+        <div class="map-eyebrow">Find Us</div>
+        <h3>Alubijid, <em style="font-style:italic; color:var(--ocean); font-family:'Cormorant Garamond',serif;">Misamis Oriental</em></h3>
       </div>
       <iframe
         class="map-frame"
@@ -625,7 +628,7 @@
   <footer>
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="/" class="logo" style="font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:white; text-decoration:none; letter-spacing:2px;">Lcabana</a>
+        <a href="/" style="font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:white; text-decoration:none; letter-spacing:2px;">Lcabana</a>
         <p>A private tropical sanctuary where luxury meets nature. Every stay is a story worth telling.</p>
       </div>
       <div class="footer-col">
@@ -640,7 +643,7 @@
       </div>
       <div class="footer-col">
         <h4>Contact</h4>
-        <p>Cagayan de Oro, Philippines</p>
+        <p>Alubijid, Misamis Oriental</p>
         <p>+63 912 345 6789</p>
         <a href="mailto:reservations@lcabanaresort.com">reservations@lcabanaresort.com</a>
       </div>
@@ -652,13 +655,11 @@
   </footer>
 
   <script>
-    // Navbar scroll
     const nav = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 60);
     });
 
-    // Fade in on scroll
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -668,21 +669,11 @@
       });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.contact-card, .form-side').forEach((el, i) => {
+    document.querySelectorAll('.info-item, .social-btn').forEach((el, i) => {
       el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
+      el.style.transform = 'translateY(16px)';
       el.style.transition = `opacity 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s`;
       observer.observe(el);
-    });
-
-    // Form submit
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      document.getElementById('successMsg').style.display = 'block';
-      this.reset();
-      setTimeout(() => {
-        document.getElementById('successMsg').style.display = 'none';
-      }, 5000);
     });
   </script>
 

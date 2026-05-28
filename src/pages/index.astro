@@ -1,3 +1,13 @@
+---
+import { supabase } from '../lib/supabase';
+
+const { data: villa } = await supabase.from('villa').select('*').single();
+
+const { data: settingsData } = await supabase.from('site_settings').select('*');
+const settings = {};
+if (settingsData) settingsData.forEach(row => settings[row.key] = row.value);
+---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +30,6 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -92,7 +101,6 @@
     }
 
     .nav-links a:hover::after { width: 100%; }
-
     nav.scrolled .nav-links a { color: var(--text); }
     .nav-links a:hover { color: var(--gold); }
     nav.scrolled .nav-links a:hover { color: var(--ocean); }
@@ -107,21 +115,9 @@
       transition: all 0.3s ease !important;
     }
 
-    .nav-cta:hover {
-      background: white !important;
-      color: var(--deep) !important;
-      border-color: white;
-    }
-
-    nav.scrolled .nav-cta {
-      border-color: var(--ocean);
-      color: var(--ocean) !important;
-    }
-
-    nav.scrolled .nav-cta:hover {
-      background: var(--ocean) !important;
-      color: white !important;
-    }
+    .nav-cta:hover { background: white !important; color: var(--deep) !important; border-color: white; }
+    nav.scrolled .nav-cta { border-color: var(--ocean); color: var(--ocean) !important; }
+    nav.scrolled .nav-cta:hover { background: var(--ocean) !important; color: white !important; }
 
     /* ── HERO ── */
     .hero {
@@ -136,28 +132,19 @@
       color: white;
       overflow: hidden;
     }
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  transform: scale(1.05);
+  animation: heroZoom 10s ease-out forwards;
+}
 
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background: url('/resort.png') center/cover no-repeat;
-      transform: scale(1.05);
-      animation: heroZoom 10s ease-out forwards;
-    }
-
-    @keyframes heroZoom {
-      to { transform: scale(1); }
-    }
+    @keyframes heroZoom { to { transform: scale(1); } }
 
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0,30,60,0.35) 0%,
-        rgba(0,20,45,0.5) 60%,
-        rgba(0,10,30,0.7) 100%
-      );
+      background: linear-gradient(to bottom, rgba(0,30,60,0.35) 0%, rgba(0,20,45,0.5) 60%, rgba(0,10,30,0.7) 100%);
     }
 
     .hero-content {
@@ -187,11 +174,7 @@
       animation: fadeUp 0.9s ease 0.5s forwards;
     }
 
-    .hero h1 em {
-      font-style: italic;
-      font-weight: 300;
-      color: var(--foam);
-    }
+    .hero h1 em { font-style: italic; font-weight: 300; color: var(--foam); }
 
     .hero p {
       font-size: clamp(15px, 2vw, 18px);
@@ -226,11 +209,7 @@
       transition: all 0.3s ease;
     }
 
-    .btn-primary:hover {
-      background: #b8933e;
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(201,168,76,0.4);
-    }
+    .btn-primary:hover { background: #b8933e; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(201,168,76,0.4); }
 
     .btn-ghost {
       padding: 16px 40px;
@@ -245,10 +224,7 @@
       transition: all 0.3s ease;
     }
 
-    .btn-ghost:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: white;
-    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: white; }
 
     .hero-scroll {
       position: absolute;
@@ -325,10 +301,7 @@
       margin-bottom: 24px;
     }
 
-    .intro-text h2 em {
-      font-style: italic;
-      color: var(--ocean);
-    }
+    .intro-text h2 em { font-style: italic; color: var(--ocean); }
 
     .intro-text p {
       color: var(--muted);
@@ -373,9 +346,7 @@
       color: var(--muted);
     }
 
-    .intro-image {
-      position: relative;
-    }
+    .intro-image { position: relative; }
 
     .intro-image img {
       width: 100%;
@@ -458,11 +429,7 @@
     .exp-card:hover { transform: translateY(-8px); box-shadow: 0 24px 48px rgba(0,0,0,0.1); }
     .exp-card:hover::before { transform: scaleX(1); }
 
-    .exp-icon {
-      font-size: 44px;
-      margin-bottom: 24px;
-      display: block;
-    }
+    .exp-icon { font-size: 44px; margin-bottom: 24px; display: block; }
 
     .exp-card h3 {
       font-family: 'Cormorant Garamond', serif;
@@ -472,11 +439,7 @@
       margin-bottom: 12px;
     }
 
-    .exp-card p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.7;
-    }
+    .exp-card p { color: var(--muted); font-size: 14px; line-height: 1.7; }
 
     /* ── VILLA ── */
     .villa {
@@ -493,9 +456,7 @@
       align-items: center;
     }
 
-    .villa-images {
-      position: relative;
-    }
+    .villa-images { position: relative; }
 
     .villa-img-main {
       width: 100%;
@@ -518,7 +479,6 @@
     }
 
     .villa-content { padding-left: 20px; }
-
     .villa-content .section-eyebrow { margin-bottom: 16px; }
 
     .villa-content h2 {
@@ -553,11 +513,7 @@
       gap: 8px;
     }
 
-    .villa-features li::before {
-      content: '✦';
-      color: var(--gold);
-      font-size: 10px;
-    }
+    .villa-features li::before { content: '✦'; color: var(--gold); font-size: 10px; }
 
     .btn-dark {
       display: inline-block;
@@ -573,10 +529,7 @@
       transition: all 0.3s ease;
     }
 
-    .btn-dark:hover {
-      background: var(--ocean);
-      transform: translateY(-2px);
-    }
+    .btn-dark:hover { background: var(--ocean); transform: translateY(-2px); }
 
     /* ── TESTIMONIAL ── */
     .testimonial {
@@ -618,11 +571,7 @@
       gap: 40px;
     }
 
-    .footer-brand .logo {
-      display: block;
-      margin-bottom: 20px;
-      color: white;
-    }
+    .footer-brand .logo { display: block; margin-bottom: 20px; color: white; }
 
     .footer-brand p {
       color: rgba(255,255,255,0.5);
@@ -663,12 +612,8 @@
       gap: 12px;
     }
 
-    .footer-bottom p {
-      color: rgba(255,255,255,0.35);
-      font-size: 12px;
-    }
+    .footer-bottom p { color: rgba(255,255,255,0.35); font-size: 12px; }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       nav { padding: 20px 24px; }
       nav.scrolled { padding: 14px 24px; }
@@ -704,15 +649,15 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-bg"></div>
+  <div class="hero-bg" style={`background: url('${settings.hero_image || '/resort.png'}') center/cover no-repeat`}></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-eyebrow">Welcome to Lcabana Resort</p>
-      <h1>Your Private<br><em>Tropical Escape</em></h1>
-      <p>Where turquoise waters meet timeless luxury. Discover a paradise crafted for those who seek the extraordinary.</p>
+<h1>{settings.hero_title || 'Your Private Tropical Escape'}</h1>
+<p>{settings.hero_subtitle || 'Where turquoise waters meet timeless luxury. Discover a paradise crafted for those who seek the extraordinary.'}</p>
       <div class="hero-buttons">
-        <a href="#" class="btn-primary">Reserve Your Stay</a>
-        <a href="/villa" class="btn-ghost">Explore Villas</a>
+        <a href="/contact" class="btn-primary">Get In Touch</a>
+        <a href="/villa" class="btn-ghost">Explore Villa</a>
       </div>
     </div>
     <div class="hero-scroll">
@@ -725,8 +670,8 @@
   <div class="strip">
     <div class="strip-item"><span>🏖️</span><span>Beachfront Location</span></div>
     <div class="strip-item"><span>🌟</span><span>5-Star Experience</span></div>
-    <div class="strip-item"><span>🍽️</span><span>Award-Winning Dining</span></div>
-    <div class="strip-item"><span>💆</span><span>Luxury Spa & Wellness</span></div>
+    <div class="strip-item"><span>🏊</span><span>Infinity Pool</span></div>
+    <div class="strip-item"><span>🎉</span><span>Event Area</span></div>
   </div>
 
   <!-- INTRO -->
@@ -736,19 +681,19 @@
       <div class="intro-divider"></div>
       <h2>A Sanctuary <em>Born from</em> Nature</h2>
       <p>Nestled along pristine shores, Lcabana Resort offers an unparalleled blend of natural beauty, world-class amenities, and deeply personalized service.</p>
-      <p>Every detail — from the architecture to the cuisine — has been thoughtfully crafted to immerse you in the island's timeless spirit.</p>
+      <p>Every detail — from the architecture to the surroundings — has been thoughtfully crafted to immerse you in the island's timeless spirit.</p>
       <div class="intro-stats">
-        <div class="stat">
-          <div class="stat-number">12+</div>
-          <div class="stat-label">Years of Excellence</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">48</div>
-          <div class="stat-label">Private Villas</div>
-        </div>
         <div class="stat">
           <div class="stat-number">5★</div>
           <div class="stat-label">Guest Rating</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">1</div>
+          <div class="stat-label">Private Villa</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Natural Setting</div>
         </div>
         <div class="stat">
           <div class="stat-number">24/7</div>
@@ -757,7 +702,7 @@
       </div>
     </div>
     <div class="intro-image">
-      <img src="/resort.png" alt="Lcabana Resort">
+      <img src={settings.intro_image || '/resort.png'} alt="Lcabana Resort">
       <div class="intro-image-accent"></div>
     </div>
   </section>
@@ -771,8 +716,8 @@
     <div class="experiences-grid">
       <div class="exp-card">
         <span class="exp-icon">🏖️</span>
-        <h3>Beachfront Villas</h3>
-        <p>Wake up to ocean views from your private terrace, just steps from the warm, crystalline sand.</p>
+        <h3>Beachfront Access</h3>
+        <p>Step directly onto the sand from your private villa. Wake up to the sound of waves and golden sunrise views.</p>
       </div>
       <div class="exp-card">
         <span class="exp-icon">🏊</span>
@@ -780,14 +725,14 @@
         <p>Float above the horizon in our stunning oceanview infinity pool — where sky and sea become one.</p>
       </div>
       <div class="exp-card">
-        <span class="exp-icon">🍽️</span>
-        <h3>Gourmet Dining</h3>
-        <p>Savor fresh seafood and international cuisine crafted by our award-winning chefs in open-air settings.</p>
+        <span class="exp-icon">🌿</span>
+        <h3>Resort Grounds</h3>
+        <p>Stroll through lush tropical gardens and serene outdoor spaces designed for relaxation and connection with nature.</p>
       </div>
       <div class="exp-card">
-        <span class="exp-icon">💆</span>
-        <h3>Spa & Wellness</h3>
-        <p>Restore your balance with holistic treatments and rituals in our serene seaside sanctuary.</p>
+        <span class="exp-icon">🎉</span>
+        <h3>Event Area</h3>
+        <p>Host memorable celebrations, gatherings, and special occasions in our beautiful beachside event space.</p>
       </div>
     </div>
   </section>
@@ -802,28 +747,26 @@
       <div class="villa-content">
         <div class="section-eyebrow">Accommodation</div>
         <h2>Luxurious Villa <em>Sanctuary</em></h2>
-        <p>Each villa is a private world — designed to dissolve the line between indoor comfort and tropical nature. Wake to birdsong, fall asleep to the tide.</p>
+        <p>{villa?.description || 'Each villa is a private world — designed to dissolve the line between indoor comfort and tropical nature. Wake to birdsong, fall asleep to the tide.'}</p>
         <ul class="villa-features">
           <li>Private plunge pool</li>
-          <li>Ocean or garden view</li>
-          <li>King-size bed</li>
+          <li>Beachfront access</li>
           <li>Open-air bathroom</li>
+          <li>Ocean-facing terrace</li>
           <li>Butler service</li>
-          <li>Premium minibar</li>
-          <li>High-speed Wi-Fi</li>
           <li>Daily housekeeping</li>
+          <li>High-speed Wi-Fi</li>
+          <li>Event area access</li>
         </ul>
-        <a href="/villa.html" class="btn-dark">Explore All Villas</a>
+        <a href="/villa" class="btn-dark">Explore Villa</a>
       </div>
     </div>
   </section>
 
   <!-- TESTIMONIAL -->
   <section class="testimonial">
-    <blockquote>
-      "Lcabana is not just a resort — it's a feeling. A place where time slows, worries fade, and every moment becomes a memory you'll carry forever."
-    </blockquote>
-    <cite>— Maria S., Returning Guest</cite>
+    <blockquote>"{settings.testimonial_quote || 'Lcabana is not just a resort — it\'s a feeling.'}"</blockquote>
+<cite>— {settings.testimonial_author || 'Maria S., Returning Guest'}</cite>
   </section>
 
   <!-- FOOTER -->
@@ -835,23 +778,22 @@
       </div>
       <div class="footer-col">
         <h4>Explore</h4>
-        <a href="/villa">Villas & Suites</a>
-        <a href="/dining">Dining</a>
-        <a href="/spa">Spa & Wellness</a>
+        <a href="/villa">Villa</a>
         <a href="/gallery">Gallery</a>
+        <a href="/contact">Contact</a>
       </div>
       <div class="footer-col">
-        <h4>Information</h4>
-        <a href="#">Rates & Offers</a>
-        <a href="#">Activities</a>
-        <a href="#">Weddings & Events</a>
-        <a href="#">FAQs</a>
+        <h4>Experience</h4>
+        <a href="#">Beach Access</a>
+        <a href="#">Infinity Pool</a>
+        <a href="#">Event Area</a>
+        <a href="#">Resort Grounds</a>
       </div>
       <div class="footer-col">
         <h4>Contact</h4>
-        <p>123 Paradise Beach Road<br>Tropical Island, TI 00001</p>
-        <p>+1 (800) 555-0123</p>
-        <a href="mailto:reservations@lcabana.com">reservations@lcabana.com</a>
+        <p>Alubijid, Misamis Oriental<br>Philippines</p>
+        <p>+63 912 345 6789</p>
+        <a href="mailto:reservations@lcabanaresort.com">reservations@lcabanaresort.com</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -861,13 +803,11 @@
   </footer>
 
   <script>
-    // Navbar scroll
     const nav = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 60);
     });
 
-    // Fade-in on scroll
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {

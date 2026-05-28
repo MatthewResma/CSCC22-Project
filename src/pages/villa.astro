@@ -2,11 +2,17 @@
 import { supabase } from '../lib/supabase';
 
 const { data: villa } = await supabase.from('villa').select('*').single();
+
+const { data: settingsData } = await supabase.from('site_settings').select('*');
+const settings = {};
+if (settingsData) settingsData.forEach(row => settings[row.key] = row.value);
+
+const villaHeroImage = settings.villa_hero_image || '/beach.jpg';
+const villaMainImage = settings.villa_main_image || '/villa.jpg';
+const villaGalleryPhotos = settings.villa_gallery ? JSON.parse(settings.villa_gallery) : [];
+const defaultGallery = ['/gallery1.jpg', '/gallery2.jpg', '/gallery3.jpg', '/gallery4.jpg', '/gallery3.jpg'];
+const galleryPhotos = villaGalleryPhotos.length > 0 ? villaGalleryPhotos : defaultGallery;
 ---
-<!DOCTYPE html>
-...
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +44,6 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       overflow-x: hidden;
     }
 
-    /* ── NAV ── */
     nav {
       position: fixed;
       top: 0;
@@ -118,7 +123,6 @@ const { data: villa } = await supabase.from('villa').select('*').single();
     nav.scrolled .nav-cta { border-color: var(--ocean); color: var(--ocean) !important; }
     nav.scrolled .nav-cta:hover { background: var(--ocean) !important; color: white !important; }
 
-    /* ── HERO ── */
     .hero {
       height: 75vh;
       min-height: 560px;
@@ -134,24 +138,16 @@ const { data: villa } = await supabase.from('villa').select('*').single();
     .hero-bg {
       position: absolute;
       inset: 0;
-      background: url('/beach.jpg') center/cover no-repeat;
       transform: scale(1.04);
       animation: heroZoom 8s ease-out forwards;
     }
 
-    @keyframes heroZoom {
-      to { transform: scale(1); }
-    }
+    @keyframes heroZoom { to { transform: scale(1); } }
 
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        to top,
-        rgba(0,20,45,0.85) 0%,
-        rgba(0,20,45,0.3) 60%,
-        rgba(0,10,30,0.2) 100%
-      );
+      background: linear-gradient(to top, rgba(0,20,45,0.85) 0%, rgba(0,20,45,0.3) 60%, rgba(0,10,30,0.2) 100%);
     }
 
     .hero-content {
@@ -197,15 +193,8 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── VILLA CARD ── */
-    .section {
-      padding: 100px 20px;
-    }
-
-    .section-inner {
-      max-width: 1160px;
-      margin: auto;
-    }
+    .section { padding: 100px 20px; }
+    .section-inner { max-width: 1160px; margin: auto; }
 
     .section-eyebrow {
       font-size: 11px;
@@ -224,7 +213,6 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       margin-bottom: 60px;
     }
 
-    /* ── VILLA FEATURE CARD ── */
     .villa-card {
       display: grid;
       grid-template-columns: 1.1fr 1fr;
@@ -236,17 +224,9 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       transition: box-shadow 0.3s ease;
     }
 
-    .villa-card:hover {
-      box-shadow: 0 20px 60px rgba(0,0,0,0.13);
-    }
+    .villa-card:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.13); }
 
-    .villa-card.reverse { direction: rtl; }
-    .villa-card.reverse > * { direction: ltr; }
-
-    .villa-card-image {
-      position: relative;
-      overflow: hidden;
-    }
+    .villa-card-image { position: relative; overflow: hidden; }
 
     .villa-card-image img {
       width: 100%;
@@ -257,9 +237,7 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       transition: transform 0.6s ease;
     }
 
-    .villa-card:hover .villa-card-image img {
-      transform: scale(1.04);
-    }
+    .villa-card:hover .villa-card-image img { transform: scale(1.04); }
 
     .villa-tag {
       position: absolute;
@@ -273,8 +251,6 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       padding: 6px 14px;
       border-radius: 2px;
     }
-
-    .villa-card.reverse .villa-tag { left: auto; right: 24px; }
 
     .villa-card-content {
       padding: 52px 48px;
@@ -292,17 +268,9 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       line-height: 1.2;
     }
 
-    .villa-card-content h3 em {
-      font-style: italic;
-      color: var(--ocean);
-    }
+    .villa-card-content h3 em { font-style: italic; color: var(--ocean); }
 
-    .villa-divider {
-      width: 40px;
-      height: 2px;
-      background: var(--gold);
-      margin: 20px 0;
-    }
+    .villa-divider { width: 40px; height: 2px; background: var(--gold); margin: 20px 0; }
 
     .villa-card-content p {
       color: var(--muted);
@@ -329,11 +297,7 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       color: var(--deep);
     }
 
-    .price-unit {
-      font-size: 13px;
-      color: var(--muted);
-      letter-spacing: 1px;
-    }
+    .price-unit { font-size: 13px; color: var(--muted); letter-spacing: 1px; }
 
     .villa-amenities {
       list-style: none;
@@ -351,12 +315,7 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       gap: 8px;
     }
 
-    .villa-amenities li::before {
-      content: '✦';
-      color: var(--gold);
-      font-size: 9px;
-      flex-shrink: 0;
-    }
+    .villa-amenities li::before { content: '✦'; color: var(--gold); font-size: 9px; flex-shrink: 0; }
 
     .btn-dark {
       display: inline-block;
@@ -373,21 +332,10 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       align-self: flex-start;
     }
 
-    .btn-dark:hover {
-      background: var(--ocean);
-      transform: translateY(-2px);
-    }
+    .btn-dark:hover { background: var(--ocean); transform: translateY(-2px); }
 
-    /* ── GALLERY ── */
-    .gallery-section {
-      padding: 100px 20px;
-      background: var(--sand);
-    }
-
-    .gallery-header {
-      max-width: 1160px;
-      margin: 0 auto 48px;
-    }
+    .gallery-section { padding: 100px 20px; background: var(--sand); }
+    .gallery-header { max-width: 1160px; margin: 0 auto 48px; }
 
     .gallery-grid {
       max-width: 1160px;
@@ -398,16 +346,8 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       gap: 16px;
     }
 
-    .gallery-item {
-      overflow: hidden;
-      border-radius: 4px;
-      position: relative;
-    }
-
-    .gallery-item:first-child {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
+    .gallery-item { overflow: hidden; border-radius: 4px; position: relative; }
+    .gallery-item:first-child { grid-column: span 2; grid-row: span 2; }
 
     .gallery-item img {
       width: 100%;
@@ -419,7 +359,6 @@ const { data: villa } = await supabase.from('villa').select('*').single();
     }
 
     .gallery-item:first-child img { min-height: 460px; }
-
     .gallery-item:hover img { transform: scale(1.06); }
 
     .gallery-overlay {
@@ -432,9 +371,7 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       justify-content: center;
     }
 
-    .gallery-item:hover .gallery-overlay {
-      background: rgba(0,30,60,0.35);
-    }
+    .gallery-item:hover .gallery-overlay { background: rgba(0,30,60,0.35); }
 
     .gallery-overlay span {
       color: white;
@@ -444,25 +381,11 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       transition: all 0.3s ease;
     }
 
-    .gallery-item:hover .gallery-overlay span {
-      opacity: 1;
-      transform: scale(1);
-    }
+    .gallery-item:hover .gallery-overlay span { opacity: 1; transform: scale(1); }
 
-    /* ── INCLUSIONS ── */
-    .inclusions {
-      padding: 100px 20px;
-      background: var(--deep);
-    }
-
-    .inclusions-inner {
-      max-width: 1160px;
-      margin: auto;
-      text-align: center;
-    }
-
+    .inclusions { padding: 100px 20px; background: var(--deep); }
+    .inclusions-inner { max-width: 1160px; margin: auto; text-align: center; }
     .inclusions .section-eyebrow { color: var(--gold); }
-
     .inclusions .section-title { color: white; margin-bottom: 60px; }
 
     .inclusions-grid {
@@ -478,11 +401,7 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       transition: all 0.3s ease;
     }
 
-    .inclusion-item:hover {
-      border-color: var(--gold);
-      background: rgba(255,255,255,0.03);
-    }
-
+    .inclusion-item:hover { border-color: var(--gold); background: rgba(255,255,255,0.03); }
     .inclusion-icon { font-size: 36px; margin-bottom: 16px; }
 
     .inclusion-item h4 {
@@ -493,18 +412,9 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       margin-bottom: 8px;
     }
 
-    .inclusion-item p {
-      font-size: 13px;
-      color: rgba(255,255,255,0.5);
-      line-height: 1.6;
-    }
+    .inclusion-item p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; }
 
-    /* ── FOOTER ── */
-    footer {
-      background: #001220;
-      color: white;
-      padding: 60px 20px 28px;
-    }
+    footer { background: #001220; color: white; padding: 60px 20px 28px; }
 
     .footer-top {
       max-width: 1160px;
@@ -514,32 +424,9 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       gap: 40px;
     }
 
-    .footer-brand p {
-      color: rgba(255,255,255,0.5);
-      font-size: 14px;
-      line-height: 1.7;
-      max-width: 260px;
-      margin-top: 16px;
-    }
-
-    .footer-col h4 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      font-weight: 400;
-      margin-bottom: 20px;
-      color: white;
-    }
-
-    .footer-col a, .footer-col p {
-      color: rgba(255,255,255,0.5);
-      font-size: 13px;
-      text-decoration: none;
-      display: block;
-      margin-bottom: 10px;
-      line-height: 1.6;
-      transition: color 0.3s;
-    }
-
+    .footer-brand p { color: rgba(255,255,255,0.5); font-size: 14px; line-height: 1.7; max-width: 260px; margin-top: 16px; }
+    .footer-col h4 { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; margin-bottom: 20px; color: white; }
+    .footer-col a, .footer-col p { color: rgba(255,255,255,0.5); font-size: 13px; text-decoration: none; display: block; margin-bottom: 10px; line-height: 1.6; transition: color 0.3s; }
     .footer-col a:hover { color: var(--gold); }
 
     .footer-bottom {
@@ -555,14 +442,12 @@ const { data: villa } = await supabase.from('villa').select('*').single();
 
     .footer-bottom p { color: rgba(255,255,255,0.3); font-size: 12px; }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       nav { padding: 20px 24px; }
       nav.scrolled { padding: 14px 24px; }
       .nav-links { display: none; }
       .hero-content { padding: 0 24px 56px; }
       .villa-card { grid-template-columns: 1fr; }
-      .villa-card.reverse { direction: ltr; }
       .gallery-grid { grid-template-columns: 1fr 1fr; }
       .gallery-item:first-child { grid-column: span 2; grid-row: span 1; }
       .footer-top { grid-template-columns: 1fr 1fr; }
@@ -589,9 +474,9 @@ const { data: villa } = await supabase.from('villa').select('*').single();
     </ul>
   </nav>
 
-  <!-- HERO -->
+  <!-- HERO — background now dynamic from admin -->
   <section class="hero">
-    <div class="hero-bg"></div>
+    <div class="hero-bg" style={`background: url('${villaHeroImage}') center/cover no-repeat`}></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-eyebrow">Lcabana Resort · Accommodations</p>
@@ -600,16 +485,15 @@ const { data: villa } = await supabase.from('villa').select('*').single();
     </div>
   </section>
 
-  <!-- VILLA CARDS -->
+  <!-- VILLA CARD -->
   <section class="section" style="background: white;">
     <div class="section-inner">
       <div class="section-eyebrow">Our Accommodations</div>
       <div class="section-title">Choose Your <em style="font-style:italic; color:var(--ocean); font-family:'Cormorant Garamond',serif;">Sanctuary</em></div>
 
-      <!-- Villa 1 -->
       <div class="villa-card">
         <div class="villa-card-image">
-          <img src="/villa.jpg" alt="Beachfront Villa">
+          <img src={villaMainImage} alt="Beachfront Villa">
           <span class="villa-tag">Most Popular</span>
         </div>
         <div class="villa-card-content">
@@ -622,50 +506,34 @@ const { data: villa } = await supabase.from('villa').select('*').single();
           </div>
           <ul class="villa-amenities">
             <li>Private plunge pool</li>
-            <li>King-size bed</li>
+            <li>Beachfront access</li>
             <li>Open-air bathroom</li>
             <li>Ocean-facing terrace</li>
             <li>Butler service</li>
-            <li>Daily breakfast</li>
             <li>Free-flow Wi-Fi</li>
             <li>Daily housekeeping</li>
+            <li>Event area access</li>
           </ul>
           <a href="/contact" class="btn-dark">Inquire Now</a>
         </div>
       </div>
 
-
-
     </div>
   </section>
 
-  <!-- GALLERY -->
+  <!-- GALLERY — Inside the Villas -->
   <section class="gallery-section" id="gallery">
     <div class="gallery-header">
       <div class="section-eyebrow">Visual Tour</div>
       <div class="section-title">Inside the <em style="font-style:italic; color:var(--ocean); font-family:'Cormorant Garamond',serif;">Villas</em></div>
     </div>
     <div class="gallery-grid">
-      <div class="gallery-item">
-        <img src="/gallery1.jpg" alt="Villa Interior">
-        <div class="gallery-overlay"><span>🔍</span></div>
-      </div>
-      <div class="gallery-item">
-        <img src="/gallery2.jpg" alt="Villa View">
-        <div class="gallery-overlay"><span>🔍</span></div>
-      </div>
-      <div class="gallery-item">
-        <img src="/gallery3.jpg" alt="Villa Pool">
-        <div class="gallery-overlay"><span>🔍</span></div>
-      </div>
-      <div class="gallery-item">
-        <img src="/gallery4.jpg" alt="Villa Bathroom">
-        <div class="gallery-overlay"><span>🔍</span></div>
-      </div>
-      <div class="gallery-item">
-        <img src="/gallery3.jpg" alt="Villa Terrace">
-        <div class="gallery-overlay"><span>🔍</span></div>
-      </div>
+      {galleryPhotos.map((photo, i) => (
+        <div class="gallery-item">
+          <img src={photo} alt={`Villa photo ${i + 1}`} loading="lazy">
+          <div class="gallery-overlay"><span>🔍</span></div>
+        </div>
+      ))}
     </div>
   </section>
 
@@ -677,8 +545,8 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       <div class="inclusions-grid">
         <div class="inclusion-item">
           <div class="inclusion-icon">🌅</div>
-          <h4>Daily Breakfast</h4>
-          <p>Fresh tropical breakfast served on your terrace each morning.</p>
+          <h4>Refreshing</h4>
+          <p>Fresh tropical on your terrace each morning.</p>
         </div>
         <div class="inclusion-item">
           <div class="inclusion-icon">🏖️</div>
@@ -700,11 +568,6 @@ const { data: villa } = await supabase.from('villa').select('*').single();
           <h4>Daily Housekeeping</h4>
           <p>Turndown service and fresh linens every day.</p>
         </div>
-        <div class="inclusion-item">
-          <div class="inclusion-icon">📶</div>
-          <h4>Free Wi-Fi</h4>
-          <p>High-speed internet throughout the entire resort.</p>
-        </div>
       </div>
     </div>
   </section>
@@ -718,22 +581,20 @@ const { data: villa } = await supabase.from('villa').select('*').single();
       </div>
       <div class="footer-col">
         <h4>Explore</h4>
-        <a href="villa.html">Villas & Suites</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="#">Dining</a>
-        <a href="#">Spa & Wellness</a>
+        <a href="/villa">Villa</a>
+        <a href="/gallery">Gallery</a>
       </div>
       <div class="footer-col">
-        <h4>Information</h4>
-        <a href="#">Rates & Offers</a>
-        <a href="#">Activities</a>
-        <a href="#">FAQs</a>
+        <h4>Experience</h4>
+        <a href="#">Beach Access</a>
+        <a href="#">Infinity Pool</a>
+        <a href="#">Event Area</a>
       </div>
       <div class="footer-col">
         <h4>Contact</h4>
-        <p>123 Paradise Beach Road<br>Tropical Island, TI 00001</p>
-        <p>+1 (800) 555-0123</p>
-        <a href="mailto:reservations@lcabana.com">reservations@lcabana.com</a>
+        <p>Alubijid, Misamis Oriental<br>Philippines</p>
+        <p>+63 912 345 6789</p>
+        <a href="mailto:reservations@lcabanaresort.com">reservations@lcabanaresort.com</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -743,13 +604,11 @@ const { data: villa } = await supabase.from('villa').select('*').single();
   </footer>
 
   <script>
-    // Navbar scroll
     const nav = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 60);
     });
 
-    // Fade in on scroll
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
