@@ -1,0 +1,681 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Lcabana Resort</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ocean: #0077b6;
+      --sand: #f5efe6;
+      --deep: #003049;
+      --foam: #caf0f8;
+      --gold: #c9a84c;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #fafaf8;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 24px 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      transition: all 0.4s ease;
+    }
+
+    nav.scrolled {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      padding: 16px 64px;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      letter-spacing: 2px;
+      transition: color 0.3s;
+    }
+
+    nav.scrolled .logo { color: var(--deep); }
+
+    .nav-links {
+      display: flex;
+      gap: 44px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after { width: 100%; }
+    nav.scrolled .nav-links a { color: var(--text); }
+    .nav-links a:hover { color: var(--gold); }
+    nav.scrolled .nav-links a:hover { color: var(--ocean); }
+
+    .nav-cta {
+      padding: 10px 24px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.6);
+      color: white !important;
+      border-radius: 2px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease !important;
+    }
+
+    .nav-cta:hover { background: white !important; color: var(--deep) !important; }
+    nav.scrolled .nav-cta { border-color: var(--ocean); color: var(--ocean) !important; }
+    nav.scrolled .nav-cta:hover { background: var(--ocean) !important; color: white !important; }
+
+    /* ── HERO ── */
+    .hero {
+      height: 65vh;
+      min-height: 480px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      color: white;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('/contact.jpg') center/cover no-repeat;
+      transform: scale(1.04);
+      animation: heroZoom 8s ease-out forwards;
+    }
+
+    @keyframes heroZoom { to { transform: scale(1); } }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,20,45,0.85) 0%, rgba(0,20,45,0.3) 60%, rgba(0,10,30,0.15) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 80px 64px;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(44px, 7vw, 76px);
+      font-weight: 300;
+      line-height: 1.05;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.5s forwards;
+    }
+
+    .hero h1 em { font-style: italic; color: var(--foam); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SPLIT SCREEN ── */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 600px;
+    }
+
+    /* LEFT — DARK SIDE */
+    .split-left {
+      background: var(--deep);
+      padding: 80px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .split-left::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.08);
+      pointer-events: none;
+    }
+
+    .split-left::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(0,119,182,0.1);
+      pointer-events: none;
+    }
+
+    .split-eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .split-left h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 3vw, 44px);
+      font-weight: 300;
+      color: white;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .split-left h2 em { font-style: italic; color: var(--foam); }
+
+    .split-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--gold);
+      margin: 24px 0;
+    }
+
+    .split-left > p {
+      color: rgba(255,255,255,0.6);
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 48px;
+      max-width: 360px;
+    }
+
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .info-item-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .info-item:hover .info-item-icon {
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .info-item-text h4 {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .info-item-text p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.6;
+    }
+
+    /* RIGHT — LIGHT SIDE */
+    .split-right {
+      background: var(--sand);
+      padding: 80px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .split-right h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 3vw, 44px);
+      font-weight: 300;
+      color: var(--deep);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .split-right h2 em { font-style: italic; color: var(--ocean); }
+
+    .split-right > p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 40px;
+      margin-top: 16px;
+    }
+
+    .social-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 22px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 1.5px solid transparent;
+      background: white;
+    }
+
+    .social-btn:hover {
+      transform: translateX(6px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .social-btn-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn-text {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .social-btn-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .social-btn-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .social-btn-arrow {
+      font-size: 16px;
+      color: var(--muted);
+      transition: all 0.3s;
+    }
+
+    .social-btn:hover .social-btn-arrow {
+      color: var(--text);
+      transform: translateX(4px);
+    }
+
+    /* Facebook */
+    .btn-facebook { border-color: #e8eeff; }
+    .btn-facebook:hover { border-color: #1877f2; }
+    .btn-facebook .social-btn-icon { background: #1877f2; color: white; }
+
+    /* Instagram */
+    .btn-instagram { border-color: #ffe8f3; }
+    .btn-instagram:hover { border-color: #e1306c; }
+    .btn-instagram .social-btn-icon { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
+
+    /* Phone */
+    .btn-phone { border-color: #e8fdf0; }
+    .btn-phone:hover { border-color: #16a34a; }
+    .btn-phone .social-btn-icon { background: #16a34a; color: white; }
+
+    /* Email */
+    .btn-email { border-color: #fef9e8; }
+    .btn-email:hover { border-color: #d97706; }
+    .btn-email .social-btn-icon { background: #d97706; color: white; }
+
+    /* ── MAP ── */
+    .map-section {
+      padding: 80px 20px;
+      background: white;
+    }
+
+    .map-inner { max-width: 1200px; margin: auto; }
+
+    .map-header { margin-bottom: 28px; }
+
+    .map-eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .map-header h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--deep);
+    }
+
+    .map-frame {
+      width: 100%;
+      height: 420px;
+      border: none;
+      border-radius: 6px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #001220;
+      color: white;
+      padding: 60px 20px 28px;
+    }
+
+    .footer-top {
+      max-width: 1200px;
+      margin: 0 auto 48px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    .footer-brand p {
+      color: rgba(255,255,255,0.5);
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 260px;
+      margin-top: 16px;
+    }
+
+    .footer-col h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .footer-col a, .footer-col p {
+      color: rgba(255,255,255,0.5);
+      font-size: 13px;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 10px;
+      line-height: 1.6;
+      transition: color 0.3s;
+    }
+
+    .footer-col a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: auto;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-bottom p { color: rgba(255,255,255,0.3); font-size: 12px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      nav.scrolled { padding: 14px 24px; }
+      .nav-links { display: none; }
+      .hero-content { padding: 0 24px 52px; }
+      .split { grid-template-columns: 1fr; }
+      .split-left { padding: 60px 32px; }
+      .split-right { padding: 60px 32px; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="/" class="logo">Lcabana</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/villa">Villa</a></li>
+      <li><a href="/gallery">Gallery</a></li>
+      <li><a href="/contact" class="nav-cta">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Lcabana Resort · Get In Touch</p>
+      <h1>We'd Love to<br><em>Hear From You</em></h1>
+    </div>
+  </section>
+
+  <!-- SPLIT SCREEN -->
+  <div class="split">
+
+    <!-- LEFT — DARK -->
+    <div class="split-left">
+      <div class="split-eyebrow">Our Details</div>
+      <h2>Find Us &<br><em>Reach Out</em></h2>
+      <div class="split-divider"></div>
+      <p>We're always happy to assist with reservations, inquiries, or anything you need to make your stay perfect.</p>
+
+      <div class="info-list">
+        <div class="info-item">
+          <div class="info-item-icon">📍</div>
+          <div class="info-item-text">
+            <h4>Location</h4>
+            <p>Alubijid, Misamis Oriental<br>Philippines</p>
+          </div>
+       
+        </div>
+        <div class="info-item">
+          
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon">🕐</div>
+          <div class="info-item-text">
+            <h4>Office Hours</h4>
+            <p>Monday – Sunday<br>8:00 AM – 8:00 PM</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT — LIGHT -->
+    <div class="split-right">
+      <div class="split-eyebrow">Connect With Us</div>
+      <h2>Message Us<br><em>Directly</em></h2>
+      <p>Reach out through any of our platforms — we respond quickly and would love to help plan your perfect getaway.</p>
+
+      <div class="social-buttons">
+
+        <a href="https://www.facebook.com/el.cabana.503" target="_blank" class="social-btn btn-facebook">
+          <div class="social-btn-icon">f</div>
+          <div class="social-btn-text">
+            <span class="social-btn-label">Facebook</span>
+            <span class="social-btn-name">Message us on Facebook</span>
+          </div>
+          <span class="social-btn-arrow">→</span>
+        </a>
+
+        <a href="tel:+639123456789" class="social-btn btn-phone">
+          <div class="social-btn-icon">📞</div>
+          <div class="social-btn-text">
+            <span class="social-btn-label">Call Us</span>
+            <span class="social-btn-name">+63 912 345 6789</span>
+          </div>
+          <span class="social-btn-arrow">→</span>
+        </a>
+
+        <a href="mailto:reservations@lcabanaresort.com" class="social-btn btn-email">
+          <div class="social-btn-icon">✉️</div>
+          <div class="social-btn-text">
+            <span class="social-btn-label">Email Us</span>
+            <span class="social-btn-name">reservations@lcabanaresort.com</span>
+          </div>
+          <span class="social-btn-arrow">→</span>
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MAP -->
+  <section class="map-section">
+    <div class="map-inner">
+      <div class="map-header">
+        <div class="map-eyebrow">Find Us</div>
+        <h3>Alubijid, <em style="font-style:italic; color:var(--ocean); font-family:'Cormorant Garamond',serif;">Misamis Oriental</em></h3>
+      </div>
+      <iframe
+        class="map-frame"
+        src="https://maps.google.com/maps?q=HFJV%2BQQJ+Alubijid+Misamis+Oriental+Philippines&output=embed"
+        loading="lazy"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" style="font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:white; text-decoration:none; letter-spacing:2px;">Lcabana</a>
+        <p>A private tropical sanctuary where luxury meets nature. Every stay is a story worth telling.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="/villa">Villas & Suites</a>
+        <a href="/gallery">Gallery</a>
+      </div>
+      <div class="footer-col">
+        <h4>Information</h4>
+        <a href="#">Rates & Offers</a>
+        <a href="#">FAQs</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>Alubijid, Misamis Oriental</p>
+        <p>+63 912 345 6789</p>
+        <a href="mailto:reservations@lcabanaresort.com">reservations@lcabanaresort.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Lcabana Resort. All Rights Reserved.</p>
+      <p>Privacy Policy · Terms of Service</p>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.info-item, .social-btn').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(16px)';
+      el.style.transition = `opacity 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s`;
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>

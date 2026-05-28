@@ -1,28 +1,829 @@
 ---
+import { supabase } from '../lib/supabase';
+
+const { data: villa } = await supabase.from('villa').select('*').single();
+
+const { data: settingsData } = await supabase.from('site_settings').select('*');
+const settings = {};
+if (settingsData) settingsData.forEach(row => settings[row.key] = row.value);
 ---
 
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Home - My Docker Project</title>
-    <meta name="viewport" content="width=device-width" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lcabana Resort | Tropical Luxury Escape</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-  <body style="font-family: sans-serif; padding: 40px;">
-    <h1>Welcome to My Docker Web App 🚀</h1>
+  <style>
+    :root {
+      --ocean: #0077b6;
+      --sky: #00b4d8;
+      --sand: #f5efe6;
+      --deep: #003049;
+      --foam: #caf0f8;
+      --gold: #c9a84c;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+    }
 
-    <p>
-      This application is running inside a Docker container using Astro.
-    </p>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
-    <h2>Features</h2>
-    <ul>
-      <li>Dockerized frontend</li>
-      <li>Astro web framework</li>
-      <li>Supabase backend integration</li>
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #fafaf8;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 24px 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      transition: all 0.4s ease;
+    }
+
+    nav.scrolled {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      padding: 16px 64px;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      letter-spacing: 2px;
+      transition: color 0.3s;
+    }
+
+    nav.scrolled .logo { color: var(--deep); }
+
+    .nav-links {
+      display: flex;
+      gap: 44px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after { width: 100%; }
+    nav.scrolled .nav-links a { color: var(--text); }
+    .nav-links a:hover { color: var(--gold); }
+    nav.scrolled .nav-links a:hover { color: var(--ocean); }
+
+    .nav-cta {
+      padding: 10px 24px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.6);
+      color: white !important;
+      border-radius: 2px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease !important;
+    }
+
+    .nav-cta:hover { background: white !important; color: var(--deep) !important; border-color: white; }
+    nav.scrolled .nav-cta { border-color: var(--ocean); color: var(--ocean) !important; }
+    nav.scrolled .nav-cta:hover { background: var(--ocean) !important; color: white !important; }
+
+    /* ── HERO ── */
+    .hero {
+      height: 100vh;
+      min-height: 700px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      overflow: hidden;
+    }
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  transform: scale(1.05);
+  animation: heroZoom 10s ease-out forwards;
+}
+
+    @keyframes heroZoom { to { transform: scale(1); } }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,30,60,0.35) 0%, rgba(0,20,45,0.5) 60%, rgba(0,10,30,0.7) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      padding: 0 20px;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(54px, 9vw, 96px);
+      font-weight: 300;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.5s forwards;
+    }
+
+    .hero h1 em { font-style: italic; font-weight: 300; color: var(--foam); }
+
+    .hero p {
+      font-size: clamp(15px, 2vw, 18px);
+      font-weight: 300;
+      opacity: 0;
+      max-width: 540px;
+      margin: 0 auto 44px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.85);
+      animation: fadeUp 0.9s ease 0.7s forwards;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.9s forwards;
+    }
+
+    .btn-primary {
+      padding: 16px 40px;
+      background: var(--gold);
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover { background: #b8933e; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(201,168,76,0.4); }
+
+    .btn-ghost {
+      padding: 16px 40px;
+      border: 1px solid rgba(255,255,255,0.5);
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: white; }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.5);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── STRIP ── */
+    .strip {
+      background: var(--deep);
+      padding: 18px 40px;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .strip-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .strip-item span:first-child { font-size: 18px; }
+
+    /* ── INTRO ── */
+    .intro {
+      padding: 120px 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: 1100px;
+      margin: auto;
+      align-items: center;
+    }
+
+    .intro-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 4vw, 52px);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--deep);
+      margin-bottom: 24px;
+    }
+
+    .intro-text h2 em { font-style: italic; color: var(--ocean); }
+
+    .intro-text p {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .intro-divider {
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 28px;
+    }
+
+    .intro-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .stat {
+      padding: 24px;
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+    }
+
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px;
+      font-weight: 300;
+      color: var(--ocean);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .intro-image { position: relative; }
+
+    .intro-image img {
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .intro-image-accent {
+      position: absolute;
+      bottom: -24px;
+      left: -24px;
+      width: 120px;
+      height: 120px;
+      background: var(--gold);
+      border-radius: 4px;
+      z-index: -1;
+    }
+
+    /* ── EXPERIENCES ── */
+    .experiences {
+      padding: 100px 20px;
+      background: var(--sand);
+    }
+
+    .experiences-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 70px;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 300;
+      color: var(--deep);
+      line-height: 1.2;
+    }
+
+    .experiences-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .exp-card {
+      background: white;
+      padding: 48px 36px;
+      border-radius: 4px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .exp-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .exp-card:hover { transform: translateY(-8px); box-shadow: 0 24px 48px rgba(0,0,0,0.1); }
+    .exp-card:hover::before { transform: scaleX(1); }
+
+    .exp-icon { font-size: 44px; margin-bottom: 24px; display: block; }
+
+    .exp-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 400;
+      color: var(--deep);
+      margin-bottom: 12px;
+    }
+
+    .exp-card p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+    /* ── VILLA ── */
+    .villa {
+      padding: 120px 20px;
+      background: white;
+    }
+
+    .villa-container {
+      max-width: 1200px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .villa-images { position: relative; }
+
+    .villa-img-main {
+      width: 100%;
+      height: 460px;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .villa-img-accent {
+      position: absolute;
+      bottom: -32px;
+      right: -32px;
+      width: 200px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 6px solid white;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+    }
+
+    .villa-content { padding-left: 20px; }
+    .villa-content .section-eyebrow { margin-bottom: 16px; }
+
+    .villa-content h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 3.5vw, 46px);
+      font-weight: 300;
+      color: var(--deep);
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+
+    .villa-content p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+
+    .villa-features {
+      list-style: none;
+      margin-bottom: 36px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .villa-features li {
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .villa-features li::before { content: '✦'; color: var(--gold); font-size: 10px; }
+
+    .btn-dark {
+      display: inline-block;
+      padding: 16px 40px;
+      background: var(--deep);
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-dark:hover { background: var(--ocean); transform: translateY(-2px); }
+
+    /* ── TESTIMONIAL ── */
+    .testimonial {
+      padding: 100px 20px;
+      background: var(--deep);
+      text-align: center;
+    }
+
+    .testimonial blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(255,255,255,0.9);
+      max-width: 800px;
+      margin: 0 auto 32px;
+      line-height: 1.5;
+    }
+
+    .testimonial cite {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #001220;
+      color: white;
+      padding: 80px 20px 32px;
+    }
+
+    .footer-top {
+      max-width: 1200px;
+      margin: 0 auto 60px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    .footer-brand .logo { display: block; margin-bottom: 20px; color: white; }
+
+    .footer-brand p {
+      color: rgba(255,255,255,0.5);
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 260px;
+    }
+
+    .footer-col h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .footer-col a, .footer-col p {
+      color: rgba(255,255,255,0.5);
+      font-size: 13px;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 10px;
+      transition: color 0.3s;
+      line-height: 1.6;
+    }
+
+    .footer-col a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: auto;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-bottom p { color: rgba(255,255,255,0.35); font-size: 12px; }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      nav.scrolled { padding: 14px 24px; }
+      .nav-links { display: none; }
+      .intro { grid-template-columns: 1fr; gap: 40px; }
+      .intro-image { display: none; }
+      .villa-container { grid-template-columns: 1fr; }
+      .villa-img-accent { display: none; }
+      .villa-content { padding-left: 0; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .strip { gap: 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .intro-stats { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="/" class="logo">Lcabana</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/villa">Villa</a></li>
+      <li><a href="/gallery">Gallery</a></li>
+      <li><a href="/contact" class="nav-cta">Contact</a></li>
     </ul>
+  </nav>
 
-    <h2>Status</h2>
-    <p style="color: green;">System is running successfully ✔</p>
-  </body>
+  <!-- HERO -->
+  <section class="hero">
+  <div class="hero-bg" style={`background: url('${settings.hero_image || '/resort.png'}') center/cover no-repeat`}></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Welcome to Lcabana Resort</p>
+<h1>{settings.hero_title || 'Your Private Tropical Escape'}</h1>
+<p>{settings.hero_subtitle || 'Where turquoise waters meet timeless luxury. Discover a paradise crafted for those who seek the extraordinary.'}</p>
+      <div class="hero-buttons">
+        <a href="/contact" class="btn-primary">Get In Touch</a>
+        <a href="/villa" class="btn-ghost">Explore Villa</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- STRIP -->
+  <div class="strip">
+    <div class="strip-item"><span>🏖️</span><span>Beachfront Location</span></div>
+    <div class="strip-item"><span>🌟</span><span>5-Star Experience</span></div>
+    <div class="strip-item"><span>🏊</span><span>Infinity Pool</span></div>
+    <div class="strip-item"><span>🎉</span><span>Event Area</span></div>
+  </div>
+
+  <!-- INTRO -->
+  <section class="intro" id="about">
+    <div class="intro-text">
+      <div class="section-eyebrow">Our Story</div>
+      <div class="intro-divider"></div>
+      <h2>A Sanctuary <em>Born from</em> Nature</h2>
+      <p>Nestled along pristine shores, Lcabana Resort offers an unparalleled blend of natural beauty, world-class amenities, and deeply personalized service.</p>
+      <p>Every detail — from the architecture to the surroundings — has been thoughtfully crafted to immerse you in the island's timeless spirit.</p>
+      <div class="intro-stats">
+        <div class="stat">
+          <div class="stat-number">5★</div>
+          <div class="stat-label">Guest Rating</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">1</div>
+          <div class="stat-label">Private Villa</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Natural Setting</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Concierge Service</div>
+        </div>
+      </div>
+    </div>
+    <div class="intro-image">
+      <img src={settings.intro_image || '/resort.png'} alt="Lcabana Resort">
+      <div class="intro-image-accent"></div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCES -->
+  <section class="experiences" id="experiences">
+    <div class="experiences-header">
+      <div class="section-eyebrow">What Awaits You</div>
+      <h2 class="section-title">Crafted Experiences for Every Desire</h2>
+    </div>
+    <div class="experiences-grid">
+      <div class="exp-card">
+        <span class="exp-icon">🏖️</span>
+        <h3>Beachfront Access</h3>
+        <p>Step directly onto the sand from your private villa. Wake up to the sound of waves and golden sunrise views.</p>
+      </div>
+      <div class="exp-card">
+        <span class="exp-icon">🏊</span>
+        <h3>Infinity Pool</h3>
+        <p>Float above the horizon in our stunning oceanview infinity pool — where sky and sea become one.</p>
+      </div>
+      <div class="exp-card">
+        <span class="exp-icon">🌿</span>
+        <h3>Resort Grounds</h3>
+        <p>Stroll through lush tropical gardens and serene outdoor spaces designed for relaxation and connection with nature.</p>
+      </div>
+      <div class="exp-card">
+        <span class="exp-icon">🎉</span>
+        <h3>Event Area</h3>
+        <p>Host memorable celebrations, gatherings, and special occasions in our beautiful beachside event space.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VILLA -->
+  <section class="villa" id="villa">
+    <div class="villa-container">
+      <div class="villa-images">
+        <img src="/room.jpg" alt="Luxury Villa" class="villa-img-main">
+        <img src="/resort.png" alt="Resort View" class="villa-img-accent">
+      </div>
+      <div class="villa-content">
+        <div class="section-eyebrow">Accommodation</div>
+        <h2>Luxurious Villa <em>Sanctuary</em></h2>
+        <p>{villa?.description || 'Each villa is a private world — designed to dissolve the line between indoor comfort and tropical nature. Wake to birdsong, fall asleep to the tide.'}</p>
+        <ul class="villa-features">
+          <li>Private plunge pool</li>
+          <li>Beachfront access</li>
+          <li>Open-air bathroom</li>
+          <li>Ocean-facing terrace</li>
+          <li>Butler service</li>
+          <li>Daily housekeeping</li>
+          <li>High-speed Wi-Fi</li>
+          <li>Event area access</li>
+        </ul>
+        <a href="/villa" class="btn-dark">Explore Villa</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="testimonial">
+    <blockquote>"{settings.testimonial_quote || 'Lcabana is not just a resort — it\'s a feeling.'}"</blockquote>
+<cite>— {settings.testimonial_author || 'Maria S., Returning Guest'}</cite>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="logo">Lcabana</a>
+        <p>A private tropical sanctuary where luxury meets nature. Every stay is a story worth telling.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="/villa">Villa</a>
+        <a href="/gallery">Gallery</a>
+        <a href="/contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Experience</h4>
+        <a href="#">Beach Access</a>
+        <a href="#">Infinity Pool</a>
+        <a href="#">Event Area</a>
+        <a href="#">Resort Grounds</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>Alubijid, Misamis Oriental<br>Philippines</p>
+        <p>+63 912 345 6789</p>
+        <a href="mailto:reservations@lcabanaresort.com">reservations@lcabanaresort.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Lcabana Resort. All Rights Reserved.</p>
+      <p>Privacy Policy · Terms of Service</p>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.exp-card, .stat, .villa-content, .intro-text').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  </script>
+
+</body>
 </html>

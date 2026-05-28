@@ -1,0 +1,630 @@
+---
+import { supabase } from '../lib/supabase';
+
+const { data: villa } = await supabase.from('villa').select('*').single();
+
+const { data: settingsData } = await supabase.from('site_settings').select('*');
+const settings = {};
+if (settingsData) settingsData.forEach(row => settings[row.key] = row.value);
+
+const villaHeroImage = settings.villa_hero_image || '/beach.jpg';
+const villaMainImage = settings.villa_main_image || '/villa.jpg';
+const villaGalleryPhotos = settings.villa_gallery ? JSON.parse(settings.villa_gallery) : [];
+const defaultGallery = ['/gallery1.jpg', '/gallery2.jpg', '/gallery3.jpg', '/gallery4.jpg', '/gallery3.jpg'];
+const galleryPhotos = villaGalleryPhotos.length > 0 ? villaGalleryPhotos : defaultGallery;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Villa | Lcabana Resort</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ocean: #0077b6;
+      --sky: #00b4d8;
+      --sand: #f5efe6;
+      --deep: #003049;
+      --foam: #caf0f8;
+      --gold: #c9a84c;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #fafaf8;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 24px 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      transition: all 0.4s ease;
+    }
+
+    nav.scrolled {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      padding: 16px 64px;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      letter-spacing: 2px;
+      transition: color 0.3s;
+    }
+
+    nav.scrolled .logo { color: var(--deep); }
+
+    .nav-links {
+      display: flex;
+      gap: 44px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after { width: 100%; }
+    nav.scrolled .nav-links a { color: var(--text); }
+    .nav-links a:hover { color: var(--gold); }
+    nav.scrolled .nav-links a:hover { color: var(--ocean); }
+
+    .nav-cta {
+      padding: 10px 24px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.6);
+      color: white !important;
+      border-radius: 2px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease !important;
+    }
+
+    .nav-cta:hover { background: white !important; color: var(--deep) !important; }
+    nav.scrolled .nav-cta { border-color: var(--ocean); color: var(--ocean) !important; }
+    nav.scrolled .nav-cta:hover { background: var(--ocean) !important; color: white !important; }
+
+    .hero {
+      height: 75vh;
+      min-height: 560px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      color: white;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      transform: scale(1.04);
+      animation: heroZoom 8s ease-out forwards;
+    }
+
+    @keyframes heroZoom { to { transform: scale(1); } }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,20,45,0.85) 0%, rgba(0,20,45,0.3) 60%, rgba(0,10,30,0.2) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 80px 72px;
+      max-width: 700px;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(44px, 7vw, 80px);
+      font-weight: 300;
+      line-height: 1.05;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.5s forwards;
+    }
+
+    .hero h1 em { font-style: italic; color: var(--foam); }
+
+    .hero p {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.7s forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section { padding: 100px 20px; }
+    .section-inner { max-width: 1160px; margin: auto; }
+
+    .section-eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 300;
+      color: var(--deep);
+      line-height: 1.2;
+      margin-bottom: 60px;
+    }
+
+    .villa-card {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      background: white;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+      margin-bottom: 40px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .villa-card:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.13); }
+
+    .villa-card-image { position: relative; overflow: hidden; }
+
+    .villa-card-image img {
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+
+    .villa-card:hover .villa-card-image img { transform: scale(1.04); }
+
+    .villa-tag {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      background: var(--gold);
+      color: white;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 2px;
+    }
+
+    .villa-card-content {
+      padding: 52px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .villa-card-content h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 34px;
+      font-weight: 400;
+      color: var(--deep);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .villa-card-content h3 em { font-style: italic; color: var(--ocean); }
+
+    .villa-divider { width: 40px; height: 2px; background: var(--gold); margin: 20px 0; }
+
+    .villa-card-content p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+
+    .villa-price-block {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 32px;
+      padding: 20px 24px;
+      background: var(--sand);
+      border-radius: 4px;
+      border-left: 3px solid var(--gold);
+    }
+
+    .price-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px;
+      font-weight: 300;
+      color: var(--deep);
+    }
+
+    .price-unit { font-size: 13px; color: var(--muted); letter-spacing: 1px; }
+
+    .villa-amenities {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+
+    .villa-amenities li {
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .villa-amenities li::before { content: '✦'; color: var(--gold); font-size: 9px; flex-shrink: 0; }
+
+    .btn-dark {
+      display: inline-block;
+      padding: 15px 36px;
+      background: var(--deep);
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      align-self: flex-start;
+    }
+
+    .btn-dark:hover { background: var(--ocean); transform: translateY(-2px); }
+
+    .gallery-section { padding: 100px 20px; background: var(--sand); }
+    .gallery-header { max-width: 1160px; margin: 0 auto 48px; }
+
+    .gallery-grid {
+      max-width: 1160px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto;
+      gap: 16px;
+    }
+
+    .gallery-item { overflow: hidden; border-radius: 4px; position: relative; }
+    .gallery-item:first-child { grid-column: span 2; grid-row: span 2; }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-item:first-child img { min-height: 460px; }
+    .gallery-item:hover img { transform: scale(1.06); }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,30,60,0);
+      transition: background 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gallery-item:hover .gallery-overlay { background: rgba(0,30,60,0.35); }
+
+    .gallery-overlay span {
+      color: white;
+      font-size: 28px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.3s ease;
+    }
+
+    .gallery-item:hover .gallery-overlay span { opacity: 1; transform: scale(1); }
+
+    .inclusions { padding: 100px 20px; background: var(--deep); }
+    .inclusions-inner { max-width: 1160px; margin: auto; text-align: center; }
+    .inclusions .section-eyebrow { color: var(--gold); }
+    .inclusions .section-title { color: white; margin-bottom: 60px; }
+
+    .inclusions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+    }
+
+    .inclusion-item {
+      padding: 36px 24px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .inclusion-item:hover { border-color: var(--gold); background: rgba(255,255,255,0.03); }
+    .inclusion-icon { font-size: 36px; margin-bottom: 16px; }
+
+    .inclusion-item h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .inclusion-item p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+    footer { background: #001220; color: white; padding: 60px 20px 28px; }
+
+    .footer-top {
+      max-width: 1160px;
+      margin: 0 auto 48px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    .footer-brand p { color: rgba(255,255,255,0.5); font-size: 14px; line-height: 1.7; max-width: 260px; margin-top: 16px; }
+    .footer-col h4 { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; margin-bottom: 20px; color: white; }
+    .footer-col a, .footer-col p { color: rgba(255,255,255,0.5); font-size: 13px; text-decoration: none; display: block; margin-bottom: 10px; line-height: 1.6; transition: color 0.3s; }
+    .footer-col a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      max-width: 1160px;
+      margin: auto;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-bottom p { color: rgba(255,255,255,0.3); font-size: 12px; }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      nav.scrolled { padding: 14px 24px; }
+      .nav-links { display: none; }
+      .hero-content { padding: 0 24px 56px; }
+      .villa-card { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:first-child { grid-column: span 2; grid-row: span 1; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item:first-child { grid-column: span 1; }
+      .footer-top { grid-template-columns: 1fr; }
+      .villa-amenities { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="/" class="logo">Lcabana</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/villa">Villa</a></li>
+      <li><a href="/gallery">Gallery</a></li>
+      <li><a href="/contact" class="nav-cta">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO — background now dynamic from admin -->
+  <section class="hero">
+    <div class="hero-bg" style={`background: url('${villaHeroImage}') center/cover no-repeat`}></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Lcabana Resort · Accommodations</p>
+      <h1>Private Beach<br><em>Villa Experience</em></h1>
+      <p>Handcrafted spaces where the ocean becomes your backyard and luxury feels effortless.</p>
+    </div>
+  </section>
+
+  <!-- VILLA CARD -->
+  <section class="section" style="background: white;">
+    <div class="section-inner">
+      <div class="section-eyebrow">Our Accommodations</div>
+      <div class="section-title">Choose Your <em style="font-style:italic; color:var(--ocean); font-family:'Cormorant Garamond',serif;">Sanctuary</em></div>
+
+      <div class="villa-card">
+        <div class="villa-card-image">
+          <img src={villaMainImage} alt="Beachfront Villa">
+          <span class="villa-tag">Most Popular</span>
+        </div>
+        <div class="villa-card-content">
+          <h3>{villa?.name || 'Beachfront Villa'}</h3>
+          <div class="villa-divider"></div>
+          <p>{villa?.description || 'Step directly onto the sand from your private terrace.'}</p>
+          <div class="villa-price-block">
+            <span class="price-amount">₱{villa?.price || '5,000'}</span>
+            <span class="price-unit">/ night · inclusive</span>
+          </div>
+          <ul class="villa-amenities">
+            <li>Private plunge pool</li>
+            <li>Beachfront access</li>
+            <li>Open-air bathroom</li>
+            <li>Ocean-facing terrace</li>
+            <li>Butler service</li>
+            <li>Free-flow Wi-Fi</li>
+            <li>Daily housekeeping</li>
+            <li>Event area access</li>
+          </ul>
+          <a href="/contact" class="btn-dark">Inquire Now</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GALLERY — Inside the Villas -->
+  <section class="gallery-section" id="gallery">
+    <div class="gallery-header">
+      <div class="section-eyebrow">Visual Tour</div>
+      <div class="section-title">Inside the <em style="font-style:italic; color:var(--ocean); font-family:'Cormorant Garamond',serif;">Villas</em></div>
+    </div>
+    <div class="gallery-grid">
+      {galleryPhotos.map((photo, i) => (
+        <div class="gallery-item">
+          <img src={photo} alt={`Villa photo ${i + 1}`} loading="lazy">
+          <div class="gallery-overlay"><span>🔍</span></div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- INCLUSIONS -->
+  <section class="inclusions">
+    <div class="inclusions-inner">
+      <div class="section-eyebrow">Every Stay Includes</div>
+      <div class="section-title">All the Essentials, <em style="font-style:italic; font-family:'Cormorant Garamond',serif;">Included</em></div>
+      <div class="inclusions-grid">
+        <div class="inclusion-item">
+          <div class="inclusion-icon">🌅</div>
+          <h4>Refreshing</h4>
+          <p>Fresh tropical on your terrace each morning.</p>
+        </div>
+        <div class="inclusion-item">
+          <div class="inclusion-icon">🏖️</div>
+          <h4>Beach Access</h4>
+          <p>Exclusive access to our private beachfront, towels included.</p>
+        </div>
+        <div class="inclusion-item">
+          <div class="inclusion-icon">🏊</div>
+          <h4>Pool Access</h4>
+          <p>Unlimited use of our infinity pool with ocean views.</p>
+        </div>
+        <div class="inclusion-item">
+          <div class="inclusion-icon">🛎️</div>
+          <h4>Concierge</h4>
+          <p>24/7 personalized service for all your needs.</p>
+        </div>
+        <div class="inclusion-item">
+          <div class="inclusion-icon">🌿</div>
+          <h4>Daily Housekeeping</h4>
+          <p>Turndown service and fresh linens every day.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="logo" style="font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:white; text-decoration:none; letter-spacing:2px;">Lcabana</a>
+        <p>A private tropical sanctuary where luxury meets nature. Every stay is a story worth telling.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="/villa">Villa</a>
+        <a href="/gallery">Gallery</a>
+      </div>
+      <div class="footer-col">
+        <h4>Experience</h4>
+        <a href="#">Beach Access</a>
+        <a href="#">Infinity Pool</a>
+        <a href="#">Event Area</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>Alubijid, Misamis Oriental<br>Philippines</p>
+        <p>+63 912 345 6789</p>
+        <a href="mailto:reservations@lcabanaresort.com">reservations@lcabanaresort.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Lcabana Resort. All Rights Reserved.</p>
+      <p>Privacy Policy · Terms of Service</p>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.villa-card, .gallery-item, .inclusion-item').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
+      el.style.transition = `opacity 0.6s ease ${i * 0.08}s, transform 0.6s ease ${i * 0.08}s`;
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
