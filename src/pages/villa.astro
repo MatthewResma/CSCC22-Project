@@ -373,16 +373,6 @@ const galleryPhotos = villaGalleryPhotos.length > 0 ? villaGalleryPhotos : defau
 
     .gallery-item:hover .gallery-overlay { background: rgba(0,30,60,0.35); }
 
-    .gallery-overlay span {
-      color: white;
-      font-size: 28px;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: all 0.3s ease;
-    }
-
-    .gallery-item:hover .gallery-overlay span { opacity: 1; transform: scale(1); }
-
     .inclusions { padding: 100px 20px; background: var(--deep); }
     .inclusions-inner { max-width: 1160px; margin: auto; text-align: center; }
     .inclusions .section-eyebrow { color: var(--gold); }
@@ -402,7 +392,6 @@ const galleryPhotos = villaGalleryPhotos.length > 0 ? villaGalleryPhotos : defau
     }
 
     .inclusion-item:hover { border-color: var(--gold); background: rgba(255,255,255,0.03); }
-    .inclusion-icon { font-size: 36px; margin-bottom: 16px; }
 
     .inclusion-item h4 {
       font-family: 'Cormorant Garamond', serif;
@@ -531,7 +520,7 @@ const galleryPhotos = villaGalleryPhotos.length > 0 ? villaGalleryPhotos : defau
       {galleryPhotos.map((photo, i) => (
         <div class="gallery-item">
           <img src={photo} alt={`Villa photo ${i + 1}`} loading="lazy">
-          <div class="gallery-overlay"><span>🔍</span></div>
+          <div class="gallery-overlay"></div>
         </div>
       ))}
     </div>
@@ -544,27 +533,22 @@ const galleryPhotos = villaGalleryPhotos.length > 0 ? villaGalleryPhotos : defau
       <div class="section-title">All the Essentials, <em style="font-style:italic; font-family:'Cormorant Garamond',serif;">Included</em></div>
       <div class="inclusions-grid">
         <div class="inclusion-item">
-          <div class="inclusion-icon">🌅</div>
           <h4>Refreshing</h4>
           <p>Fresh tropical on your terrace each morning.</p>
         </div>
         <div class="inclusion-item">
-          <div class="inclusion-icon">🏖️</div>
           <h4>Beach Access</h4>
           <p>Exclusive access to our private beachfront, towels included.</p>
         </div>
         <div class="inclusion-item">
-          <div class="inclusion-icon">🏊</div>
           <h4>Pool Access</h4>
           <p>Unlimited use of our infinity pool with ocean views.</p>
         </div>
         <div class="inclusion-item">
-          <div class="inclusion-icon">🛎️</div>
           <h4>Concierge</h4>
           <p>24/7 personalized service for all your needs.</p>
         </div>
         <div class="inclusion-item">
-          <div class="inclusion-icon">🌿</div>
           <h4>Daily Housekeeping</h4>
           <p>Turndown service and fresh linens every day.</p>
         </div>

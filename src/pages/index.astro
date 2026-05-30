@@ -279,8 +279,6 @@ if (settingsData) settingsData.forEach(row => settings[row.key] = row.value);
       text-transform: uppercase;
     }
 
-    .strip-item span:first-child { font-size: 18px; }
-
     /* ── INTRO ── */
     .intro {
       padding: 120px 20px;
@@ -428,8 +426,6 @@ if (settingsData) settingsData.forEach(row => settings[row.key] = row.value);
 
     .exp-card:hover { transform: translateY(-8px); box-shadow: 0 24px 48px rgba(0,0,0,0.1); }
     .exp-card:hover::before { transform: scaleX(1); }
-
-    .exp-icon { font-size: 44px; margin-bottom: 24px; display: block; }
 
     .exp-card h3 {
       font-family: 'Cormorant Garamond', serif;
@@ -668,10 +664,10 @@ if (settingsData) settingsData.forEach(row => settings[row.key] = row.value);
 
   <!-- STRIP -->
   <div class="strip">
-    <div class="strip-item"><span>🏖️</span><span>Beachfront Location</span></div>
-    <div class="strip-item"><span>🌟</span><span>5-Star Experience</span></div>
-    <div class="strip-item"><span>🏊</span><span>Infinity Pool</span></div>
-    <div class="strip-item"><span>🎉</span><span>Event Area</span></div>
+    <div class="strip-item"><span>Beachfront Location</span></div>
+    <div class="strip-item"><span>5-Star Experience</span></div>
+    <div class="strip-item"><span>Infinity Pool</span></div>
+    <div class="strip-item"><span>Event Area</span></div>
   </div>
 
   <!-- INTRO -->
@@ -715,22 +711,18 @@ if (settingsData) settingsData.forEach(row => settings[row.key] = row.value);
     </div>
     <div class="experiences-grid">
       <div class="exp-card">
-        <span class="exp-icon">🏖️</span>
         <h3>Beachfront Access</h3>
         <p>Step directly onto the sand from your private villa. Wake up to the sound of waves and golden sunrise views.</p>
       </div>
       <div class="exp-card">
-        <span class="exp-icon">🏊</span>
         <h3>Infinity Pool</h3>
         <p>Float above the horizon in our stunning oceanview infinity pool — where sky and sea become one.</p>
       </div>
       <div class="exp-card">
-        <span class="exp-icon">🌿</span>
         <h3>Resort Grounds</h3>
         <p>Stroll through lush tropical gardens and serene outdoor spaces designed for relaxation and connection with nature.</p>
       </div>
       <div class="exp-card">
-        <span class="exp-icon">🎉</span>
         <h3>Event Area</h3>
         <p>Host memorable celebrations, gatherings, and special occasions in our beautiful beachside event space.</p>
       </div>

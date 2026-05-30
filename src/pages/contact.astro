@@ -257,26 +257,6 @@
     .info-item {
       display: flex;
       align-items: flex-start;
-      gap: 16px;
-    }
-
-    .info-item-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-      transition: all 0.3s ease;
-    }
-
-    .info-item:hover .info-item-icon {
-      background: var(--gold);
-      border-color: var(--gold);
     }
 
     .info-item-text h4 {
@@ -344,19 +324,6 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
 
-    .social-btn-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 800;
-      flex-shrink: 0;
-      transition: all 0.3s ease;
-    }
-
     .social-btn-text {
       display: flex;
       flex-direction: column;
@@ -391,22 +358,18 @@
     /* Facebook */
     .btn-facebook { border-color: #e8eeff; }
     .btn-facebook:hover { border-color: #1877f2; }
-    .btn-facebook .social-btn-icon { background: #1877f2; color: white; }
 
     /* Instagram */
     .btn-instagram { border-color: #ffe8f3; }
     .btn-instagram:hover { border-color: #e1306c; }
-    .btn-instagram .social-btn-icon { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
 
     /* Phone */
     .btn-phone { border-color: #e8fdf0; }
     .btn-phone:hover { border-color: #16a34a; }
-    .btn-phone .social-btn-icon { background: #16a34a; color: white; }
 
     /* Email */
     .btn-email { border-color: #fef9e8; }
     .btn-email:hover { border-color: #d97706; }
-    .btn-email .social-btn-icon { background: #d97706; color: white; }
 
     /* ── MAP ── */
     .map-section {
@@ -548,18 +511,12 @@
 
       <div class="info-list">
         <div class="info-item">
-          <div class="info-item-icon">📍</div>
           <div class="info-item-text">
             <h4>Location</h4>
             <p>Alubijid, Misamis Oriental<br>Philippines</p>
           </div>
-       
         </div>
         <div class="info-item">
-          
-        </div>
-        <div class="info-item">
-          <div class="info-item-icon">🕐</div>
           <div class="info-item-text">
             <h4>Office Hours</h4>
             <p>Monday – Sunday<br>8:00 AM – 8:00 PM</p>
@@ -586,7 +543,6 @@
         </a>
 
         <a href="tel:+639123456789" class="social-btn btn-phone">
-          <div class="social-btn-icon">📞</div>
           <div class="social-btn-text">
             <span class="social-btn-label">Call Us</span>
             <span class="social-btn-name">+63 912 345 6789</span>
@@ -595,7 +551,6 @@
         </a>
 
         <a href="mailto:reservations@lcabanaresort.com" class="social-btn btn-email">
-          <div class="social-btn-icon">✉️</div>
           <div class="social-btn-text">
             <span class="social-btn-label">Email Us</span>
             <span class="social-btn-name">lcabana@gmail.com</span>
