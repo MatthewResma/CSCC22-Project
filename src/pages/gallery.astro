@@ -266,18 +266,7 @@ const galleryHeroImage = settings.gallery_hero_image || '/beach1.jpg';
       transition: all 0.3s ease;
     }
 
-    .gallery-caption {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 20px;
-      font-weight: 300;
-      color: white;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: all 0.3s ease 0.05s;
-    }
-
-    .gallery-item:hover .gallery-label,
-    .gallery-item:hover .gallery-caption { opacity: 1; transform: translateY(0); }
+    .gallery-item:hover .gallery-label { opacity: 1; transform: translateY(0); }
 
     .gallery-item.hidden { display: none; }
 
@@ -344,17 +333,6 @@ const galleryHeroImage = settings.gallery_hero_image || '/beach1.jpg';
     .lightbox-prev { left: 24px; }
     .lightbox-next { right: 24px; }
     .lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.2); }
-
-    .lightbox-caption {
-      position: absolute;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: rgba(255,255,255,0.7);
-      font-size: 13px;
-      letter-spacing: 1px;
-      text-align: center;
-    }
 
     footer { background: #001220; color: white; padding: 60px 20px 28px; }
 
@@ -445,7 +423,6 @@ const galleryHeroImage = settings.gallery_hero_image || '/beach1.jpg';
           <img src={photo.url} alt={photo.caption || 'Resort photo'} loading="lazy">
           <div class="gallery-overlay">
             <span class="gallery-label">{photo.category || 'Resort'}</span>
-            <span class="gallery-caption">{photo.caption || 'L Cabana Resort'}</span>
           </div>
         </div>
       )) : (
@@ -460,7 +437,6 @@ const galleryHeroImage = settings.gallery_hero_image || '/beach1.jpg';
     <button class="lightbox-prev" id="lightboxPrev">‹</button>
     <img class="lightbox-img" id="lightboxImg" src="" alt="">
     <button class="lightbox-next" id="lightboxNext">›</button>
-    <div class="lightbox-caption" id="lightboxCaption"></div>
   </div>
 
   <!-- FOOTER -->
@@ -517,7 +493,6 @@ const galleryHeroImage = settings.gallery_hero_image || '/beach1.jpg';
 
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
-    const lightboxCaption = document.getElementById('lightboxCaption');
     let currentIndex = 0;
     let visibleItems = [];
 
@@ -526,7 +501,6 @@ const galleryHeroImage = settings.gallery_hero_image || '/beach1.jpg';
       currentIndex = index;
       const item = visibleItems[currentIndex];
       lightboxImg.src = item.querySelector('img').src;
-      lightboxCaption.textContent = item.dataset.caption;
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -540,7 +514,6 @@ const galleryHeroImage = settings.gallery_hero_image || '/beach1.jpg';
       currentIndex = (currentIndex + dir + visibleItems.length) % visibleItems.length;
       const item = visibleItems[currentIndex];
       lightboxImg.src = item.querySelector('img').src;
-      lightboxCaption.textContent = item.dataset.caption;
     }
 
     galleryItems.forEach((item, i) => {
