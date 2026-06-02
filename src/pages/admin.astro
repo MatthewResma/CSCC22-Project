@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard | L Cabana Resort</title>
+  <title>Admin Dashboard | Lcabana Resort</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,12 +18,12 @@
     .sidebar-bottom { margin-top: auto; padding: 0 28px; }
     .btn-logout { width: 100%; padding: 12px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; cursor: pointer; transition: all 0.3s; }
     .btn-logout:hover { border-color: white; color: white; }
-    .main { margin-left: 240px; padding: 40px; min-height: 100vh; }
+    .main { margin-left: 240px; padding: 40px; min-height: 100vh; max-width: calc(100vw - 240px); box-sizing: border-box; overflow: hidden; }
     .page-title { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; color: #003049; margin-bottom: 8px; }
     .page-subtitle { font-size: 13px; color: #6b7280; margin-bottom: 40px; }
     .section { display: none; }
     .section.active { display: block; }
-    .card { background: white; border-radius: 6px; padding: 36px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 24px; }
+    .card { background: white; border-radius: 6px; padding: 36px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 24px; overflow: hidden; max-width: 100%; }
     .card h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: #003049; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
     .form-group { margin-bottom: 20px; }
     .form-group label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #6b7280; margin-bottom: 8px; }
@@ -33,9 +33,9 @@
     .btn-save { padding: 12px 32px; background: #003049; color: white; border: none; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; border-radius: 2px; cursor: pointer; transition: background 0.3s; }
     .btn-save:hover { background: #0077b6; }
     .success-msg { display: none; background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 12px 16px; border-radius: 2px; font-size: 13px; margin-bottom: 20px; }
-    #galleryGrid { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
-    .gallery-thumb { position: relative; border-radius: 4px; overflow: hidden; width: 120px; height: 120px; background: #f0f0f0; flex-shrink: 0; }
-    .gallery-thumb img { width: 120px; height: 120px; object-fit: cover; display: block; }
+    #galleryGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 24px; }
+    .gallery-thumb { position: relative; border-radius: 6px; overflow: hidden; background: #f0f0f0; height: 120px; }
+    .gallery-thumb img { width: 100%; height: 120px; object-fit: cover; display: block; }
     .gallery-thumb-delete { position: absolute; top: 6px; right: 6px; background: rgba(220,38,38,0.9); color: white; border: none; border-radius: 2px; width: 26px; height: 26px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; }
     .upload-area { border: 2px dashed #e0e0e0; border-radius: 4px; padding: 40px; text-align: center; cursor: pointer; transition: border-color 0.3s; margin-top: 16px; }
     .upload-area:hover { border-color: #c9a84c; }
@@ -53,12 +53,13 @@
 <body>
 
   <div class="sidebar">
-    <div class="sidebar-logo">L Cabana</div>
+    <div class="sidebar-logo">Lcabana</div>
     <div class="sidebar-subtitle">Admin Panel</div>
-    <div class="nav-item active" data-section="homepage">Homepage</div>
-    <div class="nav-item" data-section="villa">Villa Info</div>
-    <div class="nav-item" data-section="gallery">Gallery</div>
-    <div class="nav-item" data-section="editor">Editor</div>
+    <div class="nav-item active" data-section="homepage">🏠 Homepage</div>
+    <div class="nav-item" data-section="villa">🏡 Villa Info</div>
+    <div class="nav-item" data-section="gallery">🖼️ Gallery</div>
+    <div class="nav-item" data-section="contact">📞 Contact Info</div>
+    <div class="nav-item" data-section="editor">👤 Editor</div>
     <div class="sidebar-bottom">
       <button class="btn-logout" id="logoutBtn">Sign Out</button>
     </div>
@@ -85,6 +86,7 @@
         <div class="form-group">
           <label>Hero Background Image</label>
           <div class="upload-area" id="heroUploadArea">
+            <div style="font-size:32px;">🖼️</div>
             <p>Click to upload hero image</p>
             <input type="file" id="heroImageUpload" accept="image/*" style="display:none" />
           </div>
@@ -99,12 +101,62 @@
         <div class="form-group">
           <label>Intro Image (right side photo)</label>
           <div class="upload-area" id="introUploadArea">
+            <div style="font-size:32px;">🖼️</div>
             <p>Click to upload intro image</p>
             <input type="file" id="introImageUpload" accept="image/*" style="display:none" />
           </div>
           <img id="introImagePreview" src="" style="display:none; width:100%; height:200px; object-fit:cover; border-radius:4px; margin-top:12px;" />
         </div>
         <button class="btn-save" id="saveIntro">Save Intro Image</button>
+      </div>
+
+      <div class="card">
+        <h3>Strip Text</h3>
+        <div class="success-msg" id="stripSaved">✓ Strip updated!</div>
+        <div class="form-group"><label>Item 1</label><input type="text" id="strip1" placeholder="Beachfront Location" /></div>
+        <div class="form-group"><label>Item 2</label><input type="text" id="strip2" placeholder="5-Star Experience" /></div>
+        <div class="form-group"><label>Item 3</label><input type="text" id="strip3" placeholder="Infinity Pool" /></div>
+        <div class="form-group"><label>Item 4</label><input type="text" id="strip4" placeholder="Event Area" /></div>
+        <button class="btn-save" id="saveStrip">Save Strip</button>
+      </div>
+
+      <div class="card">
+        <h3>Intro Section</h3>
+        <div class="success-msg" id="introTextSaved">✓ Intro updated!</div>
+        <div class="form-group"><label>Title</label><input type="text" id="introTitle" placeholder="A Sanctuary Born from Nature" /></div>
+        <div class="form-group"><label>Description 1</label><textarea id="introDesc1" placeholder="First paragraph..."></textarea></div>
+        <div class="form-group"><label>Description 2</label><textarea id="introDesc2" placeholder="Second paragraph..."></textarea></div>
+        <button class="btn-save" id="saveIntroText">Save Intro Text</button>
+      </div>
+
+      <div class="card">
+        <h3>Stats</h3>
+        <div class="success-msg" id="statsSaved">✓ Stats updated!</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="form-group"><label>Stat 1 Number</label><input type="text" id="stat1num" placeholder="5★" /></div>
+          <div class="form-group"><label>Stat 1 Label</label><input type="text" id="stat1label" placeholder="Guest Rating" /></div>
+          <div class="form-group"><label>Stat 2 Number</label><input type="text" id="stat2num" placeholder="1" /></div>
+          <div class="form-group"><label>Stat 2 Label</label><input type="text" id="stat2label" placeholder="Private Villa" /></div>
+          <div class="form-group"><label>Stat 3 Number</label><input type="text" id="stat3num" placeholder="100%" /></div>
+          <div class="form-group"><label>Stat 3 Label</label><input type="text" id="stat3label" placeholder="Natural Setting" /></div>
+          <div class="form-group"><label>Stat 4 Number</label><input type="text" id="stat4num" placeholder="24/7" /></div>
+          <div class="form-group"><label>Stat 4 Label</label><input type="text" id="stat4label" placeholder="Concierge Service" /></div>
+        </div>
+        <button class="btn-save" id="saveStats">Save Stats</button>
+      </div>
+
+      <div class="card">
+        <h3>Experience Cards</h3>
+        <div class="success-msg" id="expSaved">✓ Experience cards updated!</div>
+        <div class="form-group"><label>Card 1 Title</label><input type="text" id="exp1title" placeholder="Beachfront Access" /></div>
+        <div class="form-group"><label>Card 1 Description</label><textarea id="exp1desc" placeholder="Description..."></textarea></div>
+        <div class="form-group"><label>Card 2 Title</label><input type="text" id="exp2title" placeholder="Infinity Pool" /></div>
+        <div class="form-group"><label>Card 2 Description</label><textarea id="exp2desc" placeholder="Description..."></textarea></div>
+        <div class="form-group"><label>Card 3 Title</label><input type="text" id="exp3title" placeholder="Resort Grounds" /></div>
+        <div class="form-group"><label>Card 3 Description</label><textarea id="exp3desc" placeholder="Description..."></textarea></div>
+        <div class="form-group"><label>Card 4 Title</label><input type="text" id="exp4title" placeholder="Event Area" /></div>
+        <div class="form-group"><label>Card 4 Description</label><textarea id="exp4desc" placeholder="Description..."></textarea></div>
+        <button class="btn-save" id="saveExp">Save Experience Cards</button>
       </div>
 
       <div class="card">
@@ -151,6 +203,7 @@
         <div class="form-group">
           <label>Hero Background Image (top of villa page)</label>
           <div class="upload-area" id="villaHeroUpload">
+            <div style="font-size:32px;">🖼️</div>
             <p>Click to upload villa hero image</p>
             <input type="file" id="villaHeroInput" accept="image/*" style="display:none" />
           </div>
@@ -165,6 +218,7 @@
         <div class="form-group">
           <label>Main Villa Photo (shown on villa card)</label>
           <div class="upload-area" id="villaMainUpload">
+            <div style="font-size:32px;">🖼️</div>
             <p>Click to upload main villa photo</p>
             <input type="file" id="villaMainInput" accept="image/*" style="display:none" />
           </div>
@@ -179,6 +233,7 @@
         <p style="font-size:13px; color:#6b7280; margin-bottom:16px;">Upload up to 5 photos (e.g. Interior, View, Pool, Bathroom, Terrace). Max 5MB each.</p>
         <div class="villa-img-grid" id="villaGalleryGrid"></div>
         <div class="upload-area" id="villaGalleryUpload">
+          <div style="font-size:32px;">📷</div>
           <p>Click to add a villa gallery photo</p>
           <input type="file" id="villaGalleryInput" accept="image/*" style="display:none" />
         </div>
@@ -197,6 +252,7 @@
         <div class="form-group">
           <label>Hero Background Image (top of gallery page)</label>
           <div class="upload-area" id="galleryHeroUpload">
+            <div style="font-size:32px;">🖼️</div>
             <p>Click to upload gallery hero image</p>
             <input type="file" id="galleryHeroInput" accept="image/*" style="display:none" />
           </div>
@@ -221,9 +277,42 @@
           </select>
         </div>
         <div class="upload-area" id="uploadArea">
+          <div style="font-size:32px;">📷</div>
           <p>Click to upload a photo</p>
           <input type="file" id="photoUpload" accept="image/*" style="display:none" />
         </div>
+      </div>
+    </div>
+
+    <!-- CONTACT SECTION -->
+    <div class="section" id="section-contact">
+      <div class="page-title">Contact Info</div>
+      <div class="page-subtitle">Update the contact details shown on the public contact page.</div>
+
+      <div class="card">
+        <h3>Contact Details</h3>
+        <div class="success-msg" id="contactSaved">✓ Contact info updated successfully!</div>
+        <div class="form-group">
+          <label>Facebook Link</label>
+          <input type="text" id="contactFacebook" placeholder="https://www.facebook.com/el.cabana.503" />
+        </div>
+        <div class="form-group">
+          <label>Phone Number (displayed)</label>
+          <input type="text" id="contactPhone" placeholder="+63 912 345 6789" />
+        </div>
+        <div class="form-group">
+          <label>Phone Link (tel: format)</label>
+          <input type="text" id="contactPhoneLink" placeholder="tel:+639123456789" />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="contactEmail" placeholder="lcabana@gmail.com" />
+        </div>
+        <div class="form-group">
+          <label>Office Hours</label>
+          <input type="text" id="contactHours" placeholder="Monday – Sunday, 8:00 AM – 8:00 PM" />
+        </div>
+        <button class="btn-save" id="saveContact">Save Contact Info</button>
       </div>
     </div>
 
@@ -338,6 +427,81 @@
       await saveSetting('hero_subtitle', document.getElementById('heroSubtitle').value);
       document.getElementById('heroSaved').style.display = 'block';
       setTimeout(() => { document.getElementById('heroSaved').style.display = 'none'; }, 3000);
+    });
+
+    // ── LOAD EXTRA HOMEPAGE SETTINGS ──
+    async function loadExtraSettings() {
+      const { data } = await supabase.from('site_settings').select('*');
+      if (!data) return;
+      const s = {};
+      data.forEach(row => s[row.key] = row.value);
+      document.getElementById('strip1').value = s.strip_1 || '';
+      document.getElementById('strip2').value = s.strip_2 || '';
+      document.getElementById('strip3').value = s.strip_3 || '';
+      document.getElementById('strip4').value = s.strip_4 || '';
+      document.getElementById('introTitle').value = s.intro_title || '';
+      document.getElementById('introDesc1').value = s.intro_desc_1 || '';
+      document.getElementById('introDesc2').value = s.intro_desc_2 || '';
+      document.getElementById('stat1num').value = s.stat_1_number || '';
+      document.getElementById('stat1label').value = s.stat_1_label || '';
+      document.getElementById('stat2num').value = s.stat_2_number || '';
+      document.getElementById('stat2label').value = s.stat_2_label || '';
+      document.getElementById('stat3num').value = s.stat_3_number || '';
+      document.getElementById('stat3label').value = s.stat_3_label || '';
+      document.getElementById('stat4num').value = s.stat_4_number || '';
+      document.getElementById('stat4label').value = s.stat_4_label || '';
+      document.getElementById('exp1title').value = s.exp_1_title || '';
+      document.getElementById('exp1desc').value = s.exp_1_desc || '';
+      document.getElementById('exp2title').value = s.exp_2_title || '';
+      document.getElementById('exp2desc').value = s.exp_2_desc || '';
+      document.getElementById('exp3title').value = s.exp_3_title || '';
+      document.getElementById('exp3desc').value = s.exp_3_desc || '';
+      document.getElementById('exp4title').value = s.exp_4_title || '';
+      document.getElementById('exp4desc').value = s.exp_4_desc || '';
+    }
+    loadExtraSettings();
+
+    document.getElementById('saveStrip').addEventListener('click', async () => {
+      await saveSetting('strip_1', document.getElementById('strip1').value);
+      await saveSetting('strip_2', document.getElementById('strip2').value);
+      await saveSetting('strip_3', document.getElementById('strip3').value);
+      await saveSetting('strip_4', document.getElementById('strip4').value);
+      document.getElementById('stripSaved').style.display = 'block';
+      setTimeout(() => { document.getElementById('stripSaved').style.display = 'none'; }, 3000);
+    });
+
+    document.getElementById('saveIntroText').addEventListener('click', async () => {
+      await saveSetting('intro_title', document.getElementById('introTitle').value);
+      await saveSetting('intro_desc_1', document.getElementById('introDesc1').value);
+      await saveSetting('intro_desc_2', document.getElementById('introDesc2').value);
+      document.getElementById('introTextSaved').style.display = 'block';
+      setTimeout(() => { document.getElementById('introTextSaved').style.display = 'none'; }, 3000);
+    });
+
+    document.getElementById('saveStats').addEventListener('click', async () => {
+      await saveSetting('stat_1_number', document.getElementById('stat1num').value);
+      await saveSetting('stat_1_label', document.getElementById('stat1label').value);
+      await saveSetting('stat_2_number', document.getElementById('stat2num').value);
+      await saveSetting('stat_2_label', document.getElementById('stat2label').value);
+      await saveSetting('stat_3_number', document.getElementById('stat3num').value);
+      await saveSetting('stat_3_label', document.getElementById('stat3label').value);
+      await saveSetting('stat_4_number', document.getElementById('stat4num').value);
+      await saveSetting('stat_4_label', document.getElementById('stat4label').value);
+      document.getElementById('statsSaved').style.display = 'block';
+      setTimeout(() => { document.getElementById('statsSaved').style.display = 'none'; }, 3000);
+    });
+
+    document.getElementById('saveExp').addEventListener('click', async () => {
+      await saveSetting('exp_1_title', document.getElementById('exp1title').value);
+      await saveSetting('exp_1_desc', document.getElementById('exp1desc').value);
+      await saveSetting('exp_2_title', document.getElementById('exp2title').value);
+      await saveSetting('exp_2_desc', document.getElementById('exp2desc').value);
+      await saveSetting('exp_3_title', document.getElementById('exp3title').value);
+      await saveSetting('exp_3_desc', document.getElementById('exp3desc').value);
+      await saveSetting('exp_4_title', document.getElementById('exp4title').value);
+      await saveSetting('exp_4_desc', document.getElementById('exp4desc').value);
+      document.getElementById('expSaved').style.display = 'block';
+      setTimeout(() => { document.getElementById('expSaved').style.display = 'none'; }, 3000);
     });
 
     // ── INTRO IMAGE ──
@@ -512,6 +676,31 @@
       await supabase.from('gallery').delete().eq('id', id);
       loadGallery();
     };
+
+    // ── LOAD CONTACT SETTINGS ──
+    async function loadContactSettings() {
+      const { data } = await supabase.from('site_settings').select('*');
+      if (!data) return;
+      const settings = {};
+      data.forEach(row => settings[row.key] = row.value);
+      document.getElementById('contactFacebook').value = settings.contact_facebook || '';
+      document.getElementById('contactPhone').value = settings.contact_phone || '';
+      document.getElementById('contactPhoneLink').value = settings.contact_phone_link || '';
+      document.getElementById('contactEmail').value = settings.contact_email || '';
+      document.getElementById('contactHours').value = settings.contact_hours || '';
+    }
+
+    loadContactSettings();
+
+    document.getElementById('saveContact').addEventListener('click', async () => {
+      await saveSetting('contact_facebook', document.getElementById('contactFacebook').value);
+      await saveSetting('contact_phone', document.getElementById('contactPhone').value);
+      await saveSetting('contact_phone_link', document.getElementById('contactPhoneLink').value);
+      await saveSetting('contact_email', document.getElementById('contactEmail').value);
+      await saveSetting('contact_hours', document.getElementById('contactHours').value);
+      document.getElementById('contactSaved').style.display = 'block';
+      setTimeout(() => { document.getElementById('contactSaved').style.display = 'none'; }, 3000);
+    });
 
     // ── EDITOR ──
     async function loadEditor() {

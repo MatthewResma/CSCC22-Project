@@ -206,8 +206,8 @@
       }
 
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'http://localhost:4321/reset-password'
-      });
+  redirectTo: 'https://cscc-22-project.vercel.app/reset-password'
+});
 
       if (!error) {
         alert('Password reset email sent! Check your inbox.');
