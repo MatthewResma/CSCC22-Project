@@ -10,133 +10,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: #f5efe6;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .login-box {
-      background: white;
-      padding: 52px 48px;
-      border-radius: 6px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
-    }
-
-    .login-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
-      font-weight: 600;
-      color: #003049;
-      letter-spacing: 2px;
-      text-align: center;
-      margin-bottom: 8px;
-    }
-
-    .login-subtitle {
-      text-align: center;
-      font-size: 13px;
-      color: #6b7280;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 40px;
-    }
-
+    body { font-family: 'DM Sans', sans-serif; background: #f5efe6; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .login-box { background: white; padding: 52px 48px; border-radius: 6px; width: 100%; max-width: 420px; box-shadow: 0 8px 40px rgba(0,0,0,0.08); }
+    .login-logo { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: #003049; letter-spacing: 2px; text-align: center; margin-bottom: 8px; }
+    .login-subtitle { text-align: center; font-size: 13px; color: #6b7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 40px; }
     .form-group { margin-bottom: 20px; }
-
-    .form-group label {
-      display: block;
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: #6b7280;
-      margin-bottom: 8px;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1px solid #e0e0e0;
-      border-radius: 2px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      color: #1a1a2e;
-      outline: none;
-      transition: border-color 0.3s;
-    }
-
+    .form-group label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #6b7280; margin-bottom: 8px; }
+    .form-group input { width: 100%; padding: 14px 16px; border: 1px solid #e0e0e0; border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: #1a1a2e; outline: none; transition: border-color 0.3s; }
     .form-group input:focus { border-color: #c9a84c; }
-
-    .btn-login {
-      width: 100%;
-      padding: 15px;
-      background: #003049;
-      color: white;
-      border: none;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: background 0.3s;
-      margin-top: 8px;
-    }
-
+    .btn-login { width: 100%; padding: 15px; background: #003049; color: white; border: none; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; border-radius: 2px; cursor: pointer; transition: background 0.3s; margin-top: 8px; }
     .btn-login:hover { background: #0077b6; }
-
-    .error-msg {
-      display: none;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #dc2626;
-      padding: 12px 16px;
-      border-radius: 2px;
-      font-size: 13px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .links {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 24px;
-    }
-
-    .back-link {
-      display: block;
-      text-align: center;
-      font-size: 13px;
-      color: #6b7280;
-      text-decoration: none;
-      transition: color 0.3s;
-      cursor: pointer;
-    }
-
+    .error-msg { display: none; background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px 16px; border-radius: 2px; font-size: 13px; margin-bottom: 20px; text-align: center; }
+    .links { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+    .back-link { display: block; text-align: center; font-size: 13px; color: #6b7280; text-decoration: none; transition: color 0.3s; cursor: pointer; }
     .back-link:hover { color: #003049; }
-
-    .forgot-link {
-      display: block;
-      text-align: center;
-      font-size: 13px;
-      color: #c9a84c;
-      text-decoration: none;
-      transition: color 0.3s;
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-family: 'DM Sans', sans-serif;
-      width: 100%;
-    }
-
+    .forgot-link { display: block; text-align: center; font-size: 13px; color: #c9a84c; text-decoration: none; transition: color 0.3s; cursor: pointer; background: none; border: none; font-family: 'DM Sans', sans-serif; width: 100%; }
     .forgot-link:hover { color: #b8933e; }
   </style>
 </head>
@@ -179,35 +67,22 @@
     // ── LOGIN ──
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const errorMsg = document.getElementById('errorMsg');
-
       errorMsg.style.display = 'none';
-
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-      if (error) {
-        errorMsg.style.display = 'block';
-        return;
-      }
-
+      if (error) { errorMsg.style.display = 'block'; return; }
       window.location.href = '/admin';
     });
 
     // ── FORGOT PASSWORD ──
     document.getElementById('forgotPassword').addEventListener('click', async () => {
       const email = document.getElementById('email').value;
-
-      if (!email) {
-        alert('Please enter your email address first!');
-        return;
-      }
-
+      if (!email) { alert('Please enter your email address first!'); return; }
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-  redirectTo: redirectTo: 'https://lcabana-resort.vercel.app/reset-password'
-
+        redirectTo: 'https://lcabana-resort.vercel.app/reset-password'
+      });
       if (!error) {
         alert('Password reset email sent! Check your inbox.');
       } else {
