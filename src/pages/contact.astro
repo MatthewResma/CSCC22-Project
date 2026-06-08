@@ -1,5 +1,4 @@
 ---
-export const prerender = false;
 import { supabase } from '../lib/supabase';
 
 const { data: settingsData } = await supabase.from('site_settings').select('*');
@@ -11,6 +10,7 @@ const contactPhone = settings.contact_phone || '+63 912 345 6789';
 const contactPhoneLink = settings.contact_phone_link || 'tel:+639123456789';
 const contactEmail = settings.contact_email || 'lcabana@gmail.com';
 const contactHours = settings.contact_hours || 'Monday – Sunday, 8:00 AM – 8:00 PM';
+const contactHeroImage = settings.contact_hero_image || '/contact.jpg';
 ---
 
 <!DOCTYPE html>
@@ -137,7 +137,7 @@ const contactHours = settings.contact_hours || 'Monday – Sunday, 8:00 AM – 8
     .hero-bg {
       position: absolute;
       inset: 0;
-      background: url('/contact.jpg') center/cover no-repeat;
+
       transform: scale(1.04);
       animation: heroZoom 8s ease-out forwards;
     }
@@ -425,7 +425,7 @@ const contactHours = settings.contact_hours || 'Monday – Sunday, 8:00 AM – 8
   </nav>
 
   <section class="hero">
-    <div class="hero-bg"></div>
+    <div class="hero-bg" style={}></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-eyebrow">L Cabana Resort · Get In Touch</p>

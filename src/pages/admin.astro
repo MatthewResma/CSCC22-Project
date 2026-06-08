@@ -290,6 +290,21 @@
       <div class="page-subtitle">Update the contact details shown on the public contact page.</div>
 
       <div class="card">
+        <h3>Contact Page Hero Image</h3>
+        <div class="success-msg" id="contactHeroSaved">✓ Contact hero image updated!</div>
+        <div class="form-group">
+          <label>Hero Background Image (top of contact page)</label>
+          <div class="upload-area" id="contactHeroUpload">
+            <div style="font-size:32px;">🖼️</div>
+            <p>Click to upload contact hero image</p>
+            <input type="file" id="contactHeroInput" accept="image/*" style="display:none" />
+          </div>
+          <img id="contactHeroPreview" src="" style="display:none; width:100%; height:200px; object-fit:cover; border-radius:4px; margin-top:12px;" />
+        </div>
+        <button class="btn-save" id="saveContactHero">Save Contact Hero</button>
+      </div>
+
+      <div class="card">
         <h3>Contact Details</h3>
         <div class="success-msg" id="contactSaved">✓ Contact info updated successfully!</div>
         <div class="form-group">
@@ -408,6 +423,7 @@
       if (settings.villa_main_image) { document.getElementById('villaMainPreview').src = settings.villa_main_image; document.getElementById('villaMainPreview').style.display = 'block'; }
       if (settings.villa_gallery) { villaGalleryPhotos = JSON.parse(settings.villa_gallery); renderVillaGallery(); }
       if (settings.gallery_hero_image) { document.getElementById('galleryHeroPreview').src = settings.gallery_hero_image; document.getElementById('galleryHeroPreview').style.display = 'block'; }
+      if (settings.contact_hero_image) { document.getElementById('contactHeroPreview').src = settings.contact_hero_image; document.getElementById('contactHeroPreview').style.display = 'block'; }
     }
 
     loadSiteSettings();
@@ -676,6 +692,22 @@
       await supabase.from('gallery').delete().eq('id', id);
       loadGallery();
     };
+
+    // ── CONTACT HERO IMAGE ──
+    document.getElementById('contactHeroUpload').addEventListener('click', () => document.getElementById('contactHeroInput').click());
+    document.getElementById('contactHeroInput').addEventListener('change', async (e) => {
+      const url = await uploadImage('site-images', 'contact_hero', e.target.files[0]);
+      if (!url) return;
+      await saveSetting('contact_hero_image', url);
+      document.getElementById('contactHeroPreview').src = url;
+      document.getElementById('contactHeroPreview').style.display = 'block';
+      document.getElementById('contactHeroSaved').style.display = 'block';
+      setTimeout(() => { document.getElementById('contactHeroSaved').style.display = 'none'; }, 3000);
+    });
+    document.getElementById('saveContactHero').addEventListener('click', async () => {
+      document.getElementById('contactHeroSaved').style.display = 'block';
+      setTimeout(() => { document.getElementById('contactHeroSaved').style.display = 'none'; }, 3000);
+    });
 
     // ── LOAD CONTACT SETTINGS ──
     async function loadContactSettings() {

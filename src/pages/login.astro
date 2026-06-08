@@ -206,8 +206,7 @@
       }
 
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-  redirectTo: 'https://cscc-22-project.vercel.app/reset-password'
-});
+  redirectTo: redirectTo: 'https://lcabana-resort.vercel.app/reset-password'
 
       if (!error) {
         alert('Password reset email sent! Check your inbox.');
